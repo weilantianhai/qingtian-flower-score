@@ -27,7 +27,7 @@ html{color-scheme:light}body{margin:0;background:var(--paper);color:var(--ink);f
 .discHit{position:absolute;transform:translate(-50%,-50%);border-radius:50%;cursor:grab;touch-action:none;z-index:3}.discHit:active{cursor:grabbing}.discHit.mode-petal,.discHit.mode-center{cursor:pointer}.discHit.mode-outside{cursor:default}.discHit:focus-visible{outline:2px dashed #fff1b9;outline-offset:6px}.tip{position:absolute;transform:translateX(-50%);background:#f6edcf;color:#15394e;font:11px var(--mono);padding:5px 9px;pointer-events:none;white-space:nowrap;z-index:6;box-shadow:0 2px 6px #071e3044}
 .tags{position:absolute;right:4.2%;top:22%;display:flex;flex-direction:column;align-items:flex-end;gap:6px;z-index:5;max-width:230px}.tagItem{display:flex;align-items:center;background:#f4e8ba;color:#234252;box-shadow:0 2px 5px #102c4d45;font:11px var(--mono);transition:transform .18s,background .15s}.tagItem:hover{background:#fbf1cb;z-index:6}.tagMain{gap:6px;padding:4px 8px;text-align:left;max-width:172px}.tagNote{font:11px var(--serif);color:#465a52;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:86px}.tagAct{display:grid;place-items:center;width:22px;height:24px;color:#5f6f66;font-size:12px;border-left:1px solid #d7caa0}.tagAct:hover{color:#173b4c;background:#e9dba7}.tagInput{width:118px;border:0;border-bottom:1px solid #8c7b4f;background:transparent;font:11px var(--serif);color:#173b4c;padding:2px 4px;margin:2px 6px}.tagInput:focus{outline:none;border-bottom-color:#173b4c}
 .transport{padding:21px 1px 19px;gap:17px;border-bottom:1px solid var(--line)}.play{display:grid;place-items:center;flex:0 0 53px;width:53px;height:53px;border-radius:50%;background:var(--ink);color:#fff1c6;transition:background .2s,transform .2s}.play:hover{background:#235474;transform:scale(1.035)}.play svg{width:23px;height:23px}.iconPause,.play[aria-pressed=true] .iconPlay{display:none}.play[aria-pressed=true] .iconPause{display:block}.state{min-width:107px}.stateTitle{font:600 16px var(--serif);letter-spacing:.07em;gap:8px}.time{gap:6px;white-space:nowrap;margin-top:6px;font:11px var(--mono);font-variant-numeric:tabular-nums}.time span{color:var(--muted)}.wave{height:46px;position:relative;flex:1;min-width:20px}.wave canvas,.wave input{position:absolute;inset:0;width:100%;height:100%;margin:0}.wave input{opacity:0;cursor:pointer}.wave:focus-within{outline:2px solid #a1662a;outline-offset:2px}.waveTip{position:absolute;bottom:calc(100% + 5px);transform:translateX(-50%);background:var(--ink);color:var(--paper);font:10px var(--mono);padding:3px 7px;border-radius:2px;white-space:nowrap;pointer-events:none;z-index:6;letter-spacing:.03em}.keep{display:flex;gap:7px;align-items:center;justify-content:center;min-height:40px;padding:0 11px;margin-left:6px;border:1px solid #adb8a6;border-radius:3px;font-size:12px;white-space:nowrap;transition:background .15s,border-color .15s}.keep:hover{background:#eae7d6;border-color:#8a9a84}.keepCount{font:10px var(--mono);color:var(--muted);margin-left:1px}
-.bench{justify-content:space-between;flex-wrap:wrap;gap:8px 16px;padding:10px 1px;border-bottom:1px solid var(--line)}.benchGroup{flex-wrap:wrap;gap:6px 10px}.ctrlBtn{display:inline-flex;align-items:center;gap:5px;min-height:28px;padding:3px 9px;border:1px solid transparent;border-radius:2px;font:11px var(--sans);color:var(--muted);letter-spacing:.03em;transition:background .15s,border-color .15s,color .15s}.ctrlBtn b{font:500 11px var(--mono);color:var(--ink);font-weight:500}.ctrlBtn:hover{background:#ece9da;border-color:#c6cbbd;color:var(--ink)}.ctrlBtn[aria-pressed=true]{background:#e8e3ce;border-color:#a5ae9b;color:var(--ink)}.ctrlBtn .dot{width:5px;height:5px;border-radius:50%;background:#b8bea9;transition:background .15s}.ctrlBtn[aria-pressed=true] .dot{background:#b87b22}.volWrap{gap:7px;font:11px var(--mono);color:var(--muted)}.volBtn{display:grid;place-items:center;width:26px;height:26px;border-radius:2px;color:var(--muted)}.volBtn:hover{color:var(--ink);background:#ece9da}.volSlider{width:74px;height:4px;appearance:none;-webkit-appearance:none;background:#cfd2c4;border-radius:2px;cursor:pointer}.volSlider::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:11px;height:11px;border-radius:50%;background:var(--ink);border:1.5px solid var(--paper);box-shadow:0 0 0 1px var(--ink)}.volSlider::-moz-range-thumb{width:11px;height:11px;border-radius:50%;background:var(--ink);border:1.5px solid var(--paper)}.keyHint{font:10px var(--mono);color:#758379;letter-spacing:.04em;padding-left:10px;border-left:1px solid var(--line)}
+.bench{justify-content:space-between;flex-wrap:wrap;gap:8px 16px;padding:10px 1px;border-bottom:1px solid var(--line)}.benchGroup{flex-wrap:wrap;gap:6px 10px}.ctrlBtn{display:inline-flex;align-items:center;gap:5px;min-height:28px;padding:3px 9px;border:1px solid transparent;border-radius:2px;font:11px var(--sans);color:var(--muted);letter-spacing:.03em;transition:background .15s,border-color .15s,color .15s}.ctrlBtn b{font:500 11px var(--mono);color:var(--ink);font-weight:500}.ctrlBtn:hover{background:#ece9da;border-color:#c6cbbd;color:var(--ink)}.ctrlBtn[aria-pressed=true]{background:#e8e3ce;border-color:#a5ae9b;color:var(--ink)}.ctrlBtn .dot{width:5px;height:5px;border-radius:50%;background:#b8bea9;transition:background .15s}.ctrlBtn[aria-pressed=true] .dot{background:#b87b22}.volWrap{gap:7px;font:11px var(--mono);color:var(--muted)}.volBtn{display:grid;place-items:center;width:26px;height:26px;border-radius:2px;color:var(--muted)}.volBtn:hover{color:var(--ink);background:#ece9da}.volSlider{width:74px;height:4px;appearance:none;-webkit-appearance:none;background:#cfd2c4;border-radius:2px;cursor:pointer}.volSlider::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:11px;height:11px;border-radius:50%;background:var(--ink);border:1.5px solid var(--paper);box-shadow:0 0 0 1px var(--ink)}.volSlider::-moz-range-thumb{width:11px;height:11px;border-radius:50%;background:var(--ink);border:1.5px solid var(--paper)}.keyHint{font:10px var(--mono);color:#758379;letter-spacing:.04em;padding-left:10px;border-left:1px solid var(--line)}.iosHint{margin:10px 0 0;padding:7px 11px;border-left:2px solid #b87b22;background:#efe9d3;font:11px/1.6 var(--sans);color:#4b5a51}
 .catalog{padding-top:19px}.indexHead{justify-content:space-between;gap:10px;margin-bottom:15px}.indexHead h2{font:600 17px var(--serif);letter-spacing:.09em}.indexHead h2 i{margin-left:9px;font:italic 15px var(--roman);letter-spacing:0;color:#6c7569}.meta{font:10px var(--mono);color:var(--muted);letter-spacing:.06em}.chapters{display:grid;grid-template-columns:repeat(9,1fr);gap:8px}.chapters button{position:relative;border-top:1px solid var(--line);min-height:53px;text-align:left;padding:9px 5px 7px 0;color:var(--muted);transition:color .15s,border-color .15s}.chapters button:hover{border-color:var(--ink);color:var(--ink)}.chapters button[aria-current=true]{color:var(--ink);border-top:2px solid var(--line);padding-top:8px}.chapters button[aria-current=true]::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:#c39031;margin-right:5px;vertical-align:3px}.chapters button .chapBar{position:absolute;top:-2px;left:0;height:2px;width:0;background:var(--ink);pointer-events:none}.chapters button[data-looping=true] .chapBar{background:#b87b22}.chapters b{font:500 14px var(--serif);letter-spacing:.09em}.chapters time{display:block;font:10px var(--mono);margin-top:4px;letter-spacing:.04em}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 dialog{inset:0;border:0;border-radius:3px;padding:0;width:min(590px,calc(100% - 30px));max-height:85dvh;margin:auto;background:var(--paper);color:var(--ink);box-shadow:0 18px 90px #041c3c66}dialog::backdrop{background:#061c32ac}.folioInner{padding:28px clamp(22px,4vw,44px) 32px}.dialogTop{justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:12px}.dialogTop i{font:italic 18px var(--roman)}.close{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%}.folioInner h2{font:600 33px var(--serif);letter-spacing:.08em;margin:23px 0 8px}.folioInner h3{font:600 18px var(--serif);margin:20px 0 6px}.folioInner p{color:#43534e;line-height:1.85}.examples{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.examples button{padding:5px 9px;border:1px solid #9ca99c;border-radius:2px;background:#ebeadd;font-size:12px}.examples button:hover{background:#e1dfce}.instructions{margin-top:22px;padding-top:13px;border-top:1px solid var(--line);font-size:12px}
@@ -77,6 +77,7 @@ dialog{inset:0;border:0;border-radius:3px;padding:0;width:min(590px,calc(100% - 
     </div>
   </section>
   <section class="catalog" aria-labelledby="indexTitle"><div class="indexHead"><h2 id="indexTitle">乐段索引<i lang="en">Movements</i></h2><span id="measure" class="meta">4/4　·　演奏调 C</span></div><nav class="chapters" id="chapters" aria-label="跳到乐段"></nav></section>
+  <p class="iosHint" id="iosHint" hidden></p>
   <p id="announce" class="sr" role="status"></p>
 </main>
 <dialog id="folio" aria-labelledby="notesTitle"><article class="folioInner">
@@ -127,6 +128,51 @@ const score = (() => {
   }
   return {notes, pedal, duration};
 })();
+
+// ---- iOS / Safari 声音解锁 -------------------------------------------------
+// iPhone 把网页里的 Web Audio 默认归到 ambient 会话，侧边静音开关一拨就整页无声，
+// 而页面自己看到的一切都还「正常运行」。声明成 playback 会话（Safari 16.4+）才不会
+// 被静音开关掐掉；更老的系统退回循环播放一段静音 <audio>，同样能把会话抬到播放类。
+const SILENT_WAV = 'data:audio/wav;base64,UklGRrQBAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YZABAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg';
+const TOUCH_IOS = navigator.maxTouchPoints > 1 && /iP(hone|ad|od)|Mac/.test(navigator.platform || navigator.userAgent || '');
+let keepAliveAudio = null, gestureArmed = false;
+
+function armAudioSession(cycle) {
+  try {
+    const session = navigator.audioSession;
+    if (!session) return false;
+    if (cycle) session.type = 'ambient';   // 先退回再抬回：GPU 进程重启后 WebKit 会缓存旧类别，
+    if (session.type !== 'playback') session.type = 'playback'; // 只重复赋同值会被去重，必须这样绕
+    return true;
+  } catch { return false; }
+}
+
+function keepAliveTone() {
+  if (keepAliveAudio || !TOUCH_IOS) return;
+  if (armAudioSession()) return;           // 有 audioSession 就不必再挂静音声轨
+  try {
+    const el = document.createElement('audio');
+    el.setAttribute('x-webkit-airplay', 'deny');
+    el.setAttribute('playsinline', '');
+    el.preload = 'auto';
+    el.loop = true;
+    el.src = SILENT_WAV;
+    el.style.display = 'none';
+    document.body.appendChild(el);
+    el.play().then(() => { keepAliveAudio = el; }, () => { el.remove(); });
+  } catch {}
+}
+
+function firstGesture() {
+  if (gestureArmed) return;
+  gestureArmed = true;
+  armAudioSession();
+  keepAliveTone();
+}
+for (const ev of ['touchend', 'pointerup', 'click', 'keydown']) {
+  window.addEventListener(ev, firstGesture, { capture: true, passive: true });
+}
+window.addEventListener('pageshow', () => armAudioSession(true));
 
 class PaperPlayer {
   constructor(score) {
@@ -228,7 +274,24 @@ class PaperPlayer {
       wet.gain.value = this.timbre === 'musicbox' ? .26 : this.timbre === 'piano' ? .23 : this.timbre === 'auto' ? .21 : .17;
       body.connect(room).connect(wet).connect(limiter);
     }
-    if (this.ctx.state !== 'running') await this.ctx.resume();
+    // 播放路径上只做普通声明；来回切类别留给 pageshow，免得播放中途短暂掉回 ambient
+    if (TOUCH_IOS) armAudioSession(false);
+    if (this.ctx.state !== 'running') { try { await this.ctx.resume(); } catch {} }
+    if (this.ctx.state !== 'running') {
+      // 极老的 iOS 只给一次手势机会：再试一次同步 resume，还不行就交给上层报错
+      try { await this.ctx.resume(); } catch {}
+    }
+    if (this.ctx.state === 'running' && !this.primed) {
+      // 在真实手势里先跑一个极短的空 buffer，WebKit 才会把这条上下文接到硬件上
+      this.primed = true;
+      try {
+        const src = this.ctx.createBufferSource();
+        src.buffer = this.ctx.createBuffer(1, 1, this.ctx.sampleRate);
+        src.connect(this.ctx.destination);
+        src.start(0);
+      } catch {}
+    }
+    if (this.ctx.state !== 'running') throw new Error('audio suspended');
   }
   stopAmbientNodes() {
     if (this.ambGain && this.ctx) {
@@ -329,8 +392,10 @@ class PaperPlayer {
     const tail = mode === 'piano' ? (high ? .22 : .28) : mode === 'musicbox' ? .26 : (high ? .14 : .19);
     const end = at + left + tail;
     const osc = ctx.createOscillator(), env = ctx.createGain();
-    const pan = ctx.createStereoPanner();
-    pan.pan.value = Math.max(-.55, Math.min(.55, (n.pitch - 61) / 46));
+    // 老版 iOS 没有 StereoPannerNode（Safari 14.1 才有），缺了就直通，别让一次触键抛错掐掉整段声音
+    const pan = ctx.createStereoPanner ? ctx.createStereoPanner() : ctx.createGain();
+    const panValue = Math.max(-.55, Math.min(.55, (n.pitch - 61) / 46));
+    if (pan.pan) pan.pan.value = panValue; else pan.gain.value = 1;
     pan.connect(destination);
     const wKey = mode === 'piano' ? (high ? 'pianoHigh' : 'pianoLow')
       : mode === 'musicbox' ? (high ? 'boxHigh' : 'boxLow')
@@ -1185,7 +1250,14 @@ function paint(now){
 }
 function invalidate(){lastPaint=-100;if(!frame)frame=requestAnimationFrame(paint)}
 function jump(t){player.seek(bound(t,0,end));sync(player.time);invalidate()}
-function audioProblem(){const message='浏览器未能开启声音，请再点一次播放。';$('announce').textContent=message;$('storyText').textContent=message;lastText=''}
+function audioProblem(){const message='浏览器未能开启声音，请再点一次播放。';$('announce').textContent=message;$('storyText').textContent=message;lastText='';showIosHint()}
+function showIosHint(){
+  if(!TOUCH_IOS)return;
+  const el=$('iosHint');
+  if(!el)return;
+  el.textContent='还是没有声音？iPhone 侧边的静音开关会掐掉网页声音——把它拨到响铃档，再看一眼控制中心的音量。';
+  el.hidden=false;
+}
 async function start(){try{await player.play();sync(player.time);invalidate()}catch{audioProblem()}}
 function toggle(){if(player.playing){player.pause();sync(player.time);invalidate()}else start()}
 $('play').onclick=toggle;

@@ -10,4 +10,19 @@ https://weilantianhai.github.io/qingtian-flower-score/
 
 ## 本地打开
 
-直接用浏览器打开 `index.html` 即可，无需构建、无外部依赖。
+直接用浏览器打开 `index.html` 即可，无需构建、无外部依赖。（`晴天 · 花序唱片｜声音植物志.html` 现在是指向 `index.html` 的跳转页，两个地址都能用。）
+
+## 声音与 iOS
+
+页面用 Web Audio 实时合成，没有音频文件，所以浏览器必须先拿到一次点击才能出声。
+
+iPhone 上另有一层坑：网页里的 Web Audio 默认被归入 ambient 会话，侧边那颗**静音开关**一拨，整页就哑了，而 `AudioContext.state` 依旧报 `running`——从页面这边看不出任何异常。所以页面对 Safari 做了两件事：
+
+- 有 `navigator.audioSession`（Safari/iOS 16.4+）就声明成 `playback`，并且每次 `pageshow` 先把类别退回 `ambient` 再抬回 `playback`，绕开 WebKit 缓存旧类别、只重复赋同值会被去重的问题；
+- 没有这个接口的老系统，退回循环播放一段内嵌的静音 WAV，用 `<audio>` 把整页的音频会话抬到播放类。
+
+仍然没有声音时，页面会在「乐段索引」下方留一行提示：先确认静音开关在响铃档，再看控制中心音量。
+
+## 兼容性兜底
+
+老版 WebKit 没有 `StereoPannerNode`（Safari 14.1 才有）时，声部改为直通而不是抛错——否则一次触键就会掐掉整段声音。
