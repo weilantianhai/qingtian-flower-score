@@ -26,7 +26,9 @@ h1 i{font-style:italic;font-weight:400;color:var(--accent)}
 .makers{display:flex;flex-wrap:wrap;gap:8px 18px;margin:22px 0 0;font-size:12px;color:var(--muted);letter-spacing:.04em}
 .makers span{display:inline-flex;align-items:center;gap:7px}
 .makers i{width:7px;height:7px;border-radius:50%;display:block}
-.m-makers{display:flex;flex-wrap:wrap;gap:8px 18px;margin:22px 0 0;font-size:12px;color:var(--muted);letter-spacing:.04em}
+.byline{margin:20px 0 0;font-size:12px;color:var(--muted);letter-spacing:.03em}
+.byline b{font-weight:500;color:var(--ink)}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
 hr{border:0;border-top:1px solid var(--line);margin:38px 0 0}
 h2{font:11px/1 var(--sans);letter-spacing:.24em;color:var(--muted);text-transform:uppercase;margin:30px 0 16px}
 .works{display:grid;gap:14px}
@@ -40,6 +42,7 @@ h2{font:11px/1 var(--sans);letter-spacing:.24em;color:var(--muted);text-transfor
 .tag{font:10px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#fff;background:#2b3a44;
   border-radius:2px;padding:6px 8px;white-space:nowrap}
 .tag.gemini{background:#3f5b46}
+.tag.gpt{background:#7a4632}
 .enter{margin:16px 0 0;font:11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
 .enter::after{content:" →";letter-spacing:0}
 footer{margin:46px 0 0;font-size:11px;color:var(--muted);letter-spacing:.06em}
@@ -58,6 +61,7 @@ footer a{color:var(--muted)}
       <span><i style="background:#7a4632"></i>GPT 龙娘</span>
       <span><i style="background:#2c5372"></i>DeepSeek 小鲸鱼</span>
     </div>
+    <p class="byline">这一页本身是 <b>DeepSeek 小鲸鱼</b> 手写的。</p>
   </header>
 
   <hr>
@@ -66,9 +70,17 @@ footer a{color:var(--muted)}
     <a class="work" href="./patrol.html">
       <div class="top">
         <h3>PATROL<em>像素飞行</em></h3>
-        <span class="tag gemini">Gemini 猫猫</span>
+        <div class="tags"><span class="tag gemini">Gemini 猫猫</span></div>
       </div>
       <p>一台双引擎双尾的像素战斗机，在秋天湖区的落日里低空巡逻。原生 WebGL2 逐像素射线行进的地形与湖面，Canvas 2D 手绘的驾驶舱仪表——每个读数都是真的。</p>
+      <div class="enter">进入</div>
+    </a>
+    <a class="work" href="./qingtian.html">
+      <div class="top">
+        <h3>晴天 · 花序唱片<em>声音植物志</em></h3>
+        <div class="tags"><span class="tag gpt">GPT 龙娘</span><span class="tag gemini">Gemini 猫猫 增补</span></div>
+      </div>
+      <p>把歌词里那朵小黄花夹在纸上，几年后再取出来，才发现花心是一面可以重听的唱片。1,243 道音痕，九个乐段，花瓣是可以拨响的琴弦。</p>
       <div class="enter">进入</div>
     </a>
   </div>

@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#171224" />
 <title>PATROL</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,11 +16,13 @@
   html, body {
     width: 100%;
     height: 100%;
+    height: 100dvh;
     overflow: hidden;
     background: #171224;
     color: #fff7d6;
     font-family: 'Share Tech Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     touch-action: none;
+    overscroll-behavior: none;
   }
 
   #stage {
@@ -24,6 +30,7 @@
     inset: 0;
     width: 100%;
     height: 100%;
+    height: 100dvh;
     background: #171224;
     cursor: crosshair;
   }
@@ -145,9 +152,9 @@
   /* Quiet Bottom Control Hint Bar */
   #hintBar {
     position: fixed;
-    left: 12px;
-    right: 12px;
-    bottom: 10px;
+    left: max(12px, env(safe-area-inset-left, 0px));
+    right: max(12px, env(safe-area-inset-right, 0px));
+    bottom: max(10px, env(safe-area-inset-bottom, 0px));
     z-index: 25;
     display: flex;
     align-items: center;
@@ -234,7 +241,7 @@
     background: #eb9d7e;
   }
 
-  #soundBtn {
+  #soundBtn, #fsBtn {
     cursor: pointer;
     font-family: inherit;
     font-size: 11px;
@@ -243,15 +250,16 @@
     background: rgba(35, 24, 54, 0.85);
     border: 1px solid rgba(166, 130, 163, 0.5);
     padding: 2px 8px;
-    min-width: 74px;
+    min-width: 64px;
     text-align: center;
   }
-  #soundBtn.on {
+  #soundBtn { min-width: 72px; }
+  #soundBtn.on, #fsBtn.on {
     color: #ffe5a3;
     border-color: #f7bd7c;
     background: rgba(90, 69, 117, 0.8);
   }
-  #soundBtn:hover { color: #fff7d6; }
+  #soundBtn:hover, #fsBtn:hover { color: #fff7d6; }
 
   /* Touch Controls */
   #touchControls {
@@ -265,8 +273,8 @@
 
   #touchStick {
     position: absolute;
-    left: 18px;
-    bottom: 58px;
+    left: max(18px, calc(env(safe-area-inset-left, 0px) + 12px));
+    bottom: max(58px, calc(env(safe-area-inset-bottom, 0px) + 52px));
     width: 118px;
     height: 118px;
     border: 2px solid rgba(255, 229, 163, 0.45);
@@ -289,8 +297,8 @@
   }
   .touch-buttons {
     position: absolute;
-    right: 16px;
-    bottom: 58px;
+    right: max(16px, calc(env(safe-area-inset-right, 0px) + 12px));
+    bottom: max(58px, calc(env(safe-area-inset-bottom, 0px) + 52px));
     display: grid;
     grid-template-columns: repeat(2, 66px);
     gap: 10px;
@@ -316,9 +324,144 @@
   }
   .tbtn.fire { border-color: #d93843; color: #ffe5a3; }
 
-  @media (max-width: 780px) {
+  /* Portrait Rotate Prompt Overlay (Mobile / Narrow Portrait) */
+  #rotateOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    background: rgba(23, 18, 36, 0.94);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 28px 24px;
+    text-align: center;
+  }
+  #rotateOverlay.visible { display: flex; }
+
+  .rotate-icon-wrap {
+    width: 84px;
+    height: 84px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .phone-pixel {
+    width: 38px;
+    height: 62px;
+    border: 3px solid #ffe5a3;
+    background: #231836;
+    position: relative;
+    box-shadow: 0 4px 0 #0e0a17;
+    animation: patrolRotatePhone 2.4s ease-in-out infinite;
+  }
+  .phone-pixel::before {
+    content: '';
+    position: absolute;
+    inset: 5px 4px 10px 4px;
+    background: linear-gradient(
+      180deg,
+      #3d305c 0% 26%,
+      #cf8d92 26% 48%,
+      #f7bd7c 48% 66%,
+      #48949a 66% 78%,
+      #1c3357 78% 100%
+    );
+  }
+  .phone-pixel::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 3px;
+    width: 8px;
+    height: 3px;
+    margin-left: -4px;
+    background: #a682a3;
+  }
+  @keyframes patrolRotatePhone {
+    0%, 16% { transform: rotate(0deg); }
+    45%, 72% { transform: rotate(-90deg); }
+    92%, 100% { transform: rotate(0deg); }
+  }
+  .rotate-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(16px, 5vw, 22px);
+    letter-spacing: 0.14em;
+    color: #ffe5a3;
+    text-shadow: 0 3px 0 #4b3357;
+    line-height: 1.5;
+  }
+  .rotate-sub {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    color: #cf8d92;
+    max-width: 300px;
+    line-height: 1.6;
+  }
+  .rotate-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: min(260px, 80vw);
+    margin-top: 6px;
+  }
+  .rbtn {
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    padding: 10px 14px;
+    border: 2px solid #f7bd7c;
+    background: rgba(75, 51, 87, 0.85);
+    color: #fff7d6;
+    box-shadow: 0 3px 0 #0e0a17;
+  }
+  .rbtn:active { transform: translateY(2px); box-shadow: 0 1px 0 #0e0a17; }
+  .rbtn.secondary {
+    border-color: rgba(166, 130, 163, 0.55);
+    background: rgba(35, 24, 54, 0.8);
+    color: #cfc4d8;
+    font-size: 11px;
+  }
+
+  /* Brief Fullscreen Fallback Toast (e.g., iOS Safari) */
+  #fsToast {
+    position: fixed;
+    top: max(14px, env(safe-area-inset-top, 0px));
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    z-index: 45;
+    background: rgba(23, 18, 36, 0.9);
+    border: 1px solid #f7bd7c;
+    color: #ffe5a3;
+    padding: 6px 12px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    max-width: min(90vw, 420px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  #fsToast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  @media (max-width: 780px), (pointer: coarse) {
     .hint-keys { display: none; }
     #hintBar { justify-content: flex-end; }
+    .bar-group { gap: 7px; padding: 4px 8px; }
+  }
+  body.touch-mode .hint-keys { display: none; }
+  body.touch-mode #hintBar { justify-content: flex-end; }
+  @media (max-height: 460px) {
+    #touchStick { width: 96px; height: 96px; bottom: max(56px, calc(env(safe-area-inset-bottom, 0px) + 52px)); }
+    #touchKnob { width: 36px; height: 36px; margin: -18px 0 0 -18px; }
+    .touch-buttons { grid-template-columns: repeat(2, 58px); gap: 8px; bottom: max(56px, calc(env(safe-area-inset-bottom, 0px) + 52px)); }
+    .tbtn { height: 40px; font-size: 10px; }
   }
 </style>
 </head>
@@ -351,6 +494,20 @@
   </div>
 </div>
 
+<div id="rotateOverlay" role="dialog" aria-modal="true" aria-label="Rotate Device">
+  <div class="rotate-icon-wrap" aria-hidden="true">
+    <div class="phone-pixel"></div>
+  </div>
+  <div class="rotate-title">ROTATE DEVICE</div>
+  <div class="rotate-sub">TURN PHONE TO LANDSCAPE FOR FULL COCKPIT &amp; FLIGHT VIEW</div>
+  <div class="rotate-actions">
+    <button id="rotateFsBtn" class="rbtn" type="button">FULLSCREEN + LANDSCAPE</button>
+    <button id="rotateSkipBtn" class="rbtn secondary" type="button">CONTINUE PORTRAIT</button>
+  </div>
+</div>
+
+<div id="fsToast" role="status" aria-live="polite"></div>
+
 <div id="hintBar">
   <div class="bar-group hint-keys">
     <span class="hint-item"><span class="keycap">SPACE</span> VIEW</span>
@@ -370,6 +527,7 @@
       </div>
     </div>
     <button id="soundBtn" type="button" title="Toggle Web Audio Sound">SFX OFF</button>
+    <button id="fsBtn" type="button" title="Toggle Fullscreen">FULL</button>
   </div>
 </div>
 
@@ -2175,10 +2333,18 @@
   let fboMaskTex = null;
   let fboDepthRb = null;
 
+  function getViewportSize() {
+    const vv = window.visualViewport;
+    const w = vv ? vv.width : window.innerWidth;
+    const h = vv ? vv.height : window.innerHeight;
+    return { w: Math.max(1, w), h: Math.max(1, h) };
+  }
+
   function allocateRenderTargets(targetH) {
-    const aspect = Math.max(0.5, window.innerWidth / Math.max(1, window.innerHeight));
+    const { w, h } = getViewportSize();
+    const aspect = clamp(w / h, 0.42, 3.2);
     internalH = Math.max(180, Math.round(targetH));
-    internalW = Math.max(240, Math.round(internalH * aspect));
+    internalW = Math.max(160, Math.round(internalH * aspect));
 
     glCanvas.width = internalW;
     glCanvas.height = internalH;
@@ -4144,6 +4310,7 @@
     if (!input.touchActive) {
       input.touchActive = true;
       touchControlsEl.classList.add('active');
+      document.body.classList.add('touch-mode');
     }
   }
   if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
@@ -4151,7 +4318,13 @@
       enableTouchUI();
     }
   }
-  window.addEventListener('touchstart', () => { enableTouchUI(); dismissTitle(); }, { passive: true });
+  window.addEventListener('touchstart', (e) => {
+    enableTouchUI();
+    updateRotatePrompt();
+    if (!rotateOverlay.contains(e.target) && !document.getElementById('hintBar').contains(e.target)) {
+      dismissTitle();
+    }
+  }, { passive: true });
 
   function updateStickFromTouch(touch) {
     const rect = touchStick.getBoundingClientRect();
@@ -4209,6 +4382,140 @@
   bindTouchBtn('btnFire', () => { dismissTitle(); fireMissile(); });
 
   // =========================================================================
+  // 14B. MOBILE FULLSCREEN & PORTRAIT ROTATE-SCREEN PROMPT
+  // =========================================================================
+  const fsBtn = document.getElementById('fsBtn');
+  const fsToast = document.getElementById('fsToast');
+  const rotateOverlay = document.getElementById('rotateOverlay');
+  const rotateFsBtn = document.getElementById('rotateFsBtn');
+  const rotateSkipBtn = document.getElementById('rotateSkipBtn');
+
+  let rotateDismissed = false;
+  let fsToastTimer = 0;
+
+  function showFsToast(msg) {
+    fsToast.textContent = msg;
+    fsToast.classList.add('show');
+    clearTimeout(fsToastTimer);
+    fsToastTimer = setTimeout(() => fsToast.classList.remove('show'), 3600);
+  }
+
+  function getFullscreenElement() {
+    return document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullScreenElement ||
+      document.msFullscreenElement ||
+      null;
+  }
+
+  function isStandalonePwa() {
+    return Boolean(window.navigator.standalone) ||
+      (window.matchMedia && window.matchMedia('(display-mode: fullscreen)').matches) ||
+      (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+  }
+
+  function updateFullscreenUI() {
+    const active = Boolean(getFullscreenElement()) || isStandalonePwa();
+    fsBtn.textContent = active ? 'EXIT' : 'FULL';
+    fsBtn.classList.toggle('on', active);
+  }
+
+  async function enterFullscreen(lockLandscape = true) {
+    const el = document.documentElement;
+    const req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+    if (!req) {
+      // Fallback for iOS Safari where Fullscreen API is unavailable on HTML elements
+      window.scrollTo(0, 1);
+      showFsToast('SWIPE UP OR ADD TO HOME SCREEN FOR FULLSCREEN');
+      return false;
+    }
+    try {
+      const res = req.call(el, { navigationUI: 'hide' });
+      if (res && typeof res.then === 'function') await res;
+      if (lockLandscape && screen.orientation && typeof screen.orientation.lock === 'function') {
+        try { await screen.orientation.lock('landscape'); } catch {}
+      }
+      updateFullscreenUI();
+      setTimeout(handleViewportChange, 120);
+      return true;
+    } catch {
+      window.scrollTo(0, 1);
+      showFsToast('SWIPE UP OR ADD TO HOME SCREEN FOR FULLSCREEN');
+      updateFullscreenUI();
+      return false;
+    }
+  }
+
+  async function exitFullscreen() {
+    const ex = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
+    if (screen.orientation && typeof screen.orientation.unlock === 'function') {
+      try { screen.orientation.unlock(); } catch {}
+    }
+    if (ex) {
+      try {
+        const res = ex.call(document);
+        if (res && typeof res.then === 'function') await res;
+      } catch {}
+    }
+    updateFullscreenUI();
+    setTimeout(handleViewportChange, 120);
+  }
+
+  function toggleFullscreen() {
+    if (getFullscreenElement()) {
+      exitFullscreen();
+    } else {
+      const isTouchOrMobile = input.touchActive || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+      enterFullscreen(isTouchOrMobile);
+    }
+  }
+
+  function isMobilePortrait() {
+    const { w, h } = getViewportSize();
+    if (h <= w) return false;
+    const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    const touchCapable = input.touchActive || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    const mobileUA = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '');
+    return coarse || touchCapable || mobileUA || Math.min(w, h) <= 640;
+  }
+
+  function updateRotatePrompt() {
+    const show = isMobilePortrait() && !rotateDismissed;
+    rotateOverlay.classList.toggle('visible', show);
+  }
+
+  function handleViewportChange() {
+    allocateRenderTargets(RES_TIERS[resTier]);
+    updateFullscreenUI();
+    updateRotatePrompt();
+  }
+
+  fsBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleFullscreen(); });
+  fsBtn.addEventListener('touchstart', (e) => { e.stopPropagation(); }, { passive: true });
+  rotateOverlay.addEventListener('touchstart', (e) => { e.stopPropagation(); }, { passive: true });
+  rotateOverlay.addEventListener('mousedown', (e) => { e.stopPropagation(); });
+
+  rotateFsBtn.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    await enterFullscreen(true);
+    updateRotatePrompt();
+  });
+  rotateSkipBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    rotateDismissed = true;
+    updateRotatePrompt();
+  });
+
+  document.addEventListener('fullscreenchange', handleViewportChange);
+  document.addEventListener('webkitfullscreenchange', handleViewportChange);
+  window.addEventListener('orientationchange', () => setTimeout(handleViewportChange, 120));
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', handleViewportChange);
+  }
+  updateFullscreenUI();
+  updateRotatePrompt();
+
+  // =========================================================================
   // 15. DYNAMIC RESOLUTION SCALER & MAIN LOOP
   // =========================================================================
   let frameAvgMs = 16.6;
@@ -4248,9 +4555,7 @@
     updateMissileHudDom();
   }
 
-  window.addEventListener('resize', () => {
-    allocateRenderTargets(RES_TIERS[resTier]);
-  });
+  window.addEventListener('resize', handleViewportChange);
 
   // =========================================================================
   // 16. BOOT SEQUENCE (WEB WORKERS + PROGRESS BAR) & CLEAN LIFECYCLE API
@@ -4336,8 +4641,11 @@
       frameAvgMs,
       simTime,
       soundEnabled: sfx.enabled,
+      isFullscreen: Boolean(getFullscreenElement()) || isStandalonePwa(),
+      rotatePromptVisible: rotateOverlay.classList.contains('visible'),
       glError: gl.getError()
     }),
+    toggleFullscreen,
     setCameraMode: (idx, instant = false) => {
       cam.prevMode = cam.mode;
       cam.mode = ((idx % 3) + 3) % 3;
