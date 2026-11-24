@@ -782,7 +782,80 @@
     letter-spacing: 0.08em;
     margin: 0;
   }
-  .lan-btn-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .lan-btn-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .lan-ipv6-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: rgba(10, 26, 46, 0.85);
+    border: 1px solid rgba(104, 236, 216, 0.42);
+    padding: 7px 10px;
+    font-size: 10px;
+  }
+  .lan-ipv6-bar .seg-btn { min-width: 0; white-space: nowrap; }
+  .lan-ipv6-info { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .lan-ipv6-pill {
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 3px;
+    background: rgba(118, 204, 255, 0.16);
+    border: 1px solid rgba(118, 204, 255, 0.45);
+    color: #9be8ff;
+  }
+  .lan-ipv6-pill.ok { background: rgba(94, 242, 122, 0.16); border-color: #5ef27a; color: #9effb0; }
+  .lan-ipv6-pill.warn { background: rgba(255, 208, 38, 0.15); border-color: #ffd026; color: #ffe784; }
+  .lan-ipv6-pill.no { background: rgba(255, 76, 98, 0.16); border-color: #ff5c72; color: #ff9eaa; }
+  .lan-ipv6-addr {
+    font-family: 'Share Tech Mono', monospace;
+    color: #fff8dc;
+    background: #091224;
+    border: 1px solid #3c5b82;
+    padding: 2px 6px;
+    user-select: all;
+    max-width: 270px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .lan-addr-input {
+    font-family: 'Share Tech Mono', monospace;
+    background: #0c1528;
+    color: #9effb0;
+    border: 1px solid #4d709c;
+    padding: 6px 8px;
+    font-size: 11px;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+  }
+  .lan-addr-input:focus { border-color: #68ecd8; }
+  .lan-fold {
+    background: rgba(9, 17, 34, 0.72);
+    border: 1px solid rgba(118, 204, 255, 0.25);
+    padding: 6px 10px;
+  }
+  .lan-fold summary {
+    cursor: pointer;
+    color: #8eb4d8;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    user-select: none;
+  }
+  .lan-fold .lan-grid { margin-top: 8px; }
+  .lan-proto-tag {
+    display: inline-block;
+    margin-left: 5px;
+    padding: 0 5px;
+    font-size: 9px;
+    border-radius: 2px;
+    background: rgba(104, 236, 216, 0.18);
+    border: 1px solid rgba(104, 236, 216, 0.55);
+    color: #8ff8eb;
+  }
+  .lan-proto-tag.v4 { background: rgba(255, 208, 38, 0.15); border-color: rgba(255, 208, 38, 0.5); color: #ffe37e; }
+  .lan-proto-tag.relay { background: rgba(186, 120, 255, 0.20); border-color: #c58cff; color: #ebd6ff; }
   .lan-btn-row .seg-btn { min-width: 0; flex: 1; padding: 5px 8px; font-size: 10px; }
   .lan-status { font-size: 10px; color: #96b8de; min-height: 14px; }
   .lan-peers {
@@ -908,8 +981,13 @@
     </div>
 
     <div class="set-row">
-      <div class="set-label"><span data-i18n="lblRumble">手柄震动反馈</span><span class="set-sub" data-i18n="subRumble">加力、机枪、导弹与低空震动</span></div>
+      <div class="set-label"><span data-i18n="lblRumble">手柄震动反馈</span><span class="set-sub" data-i18n="subRumble">喷气、机枪、导弹与干扰震动</span></div>
       <div class="set-ctrl"><button id="optRumble" class="seg-btn" type="button">开启</button></div>
+    </div>
+
+    <div class="set-row">
+      <div class="set-label"><span data-i18n="lblBotDiff">敌机 AI 难度</span><span class="set-sub" data-i18n="subBotDiff">切换普通或 2 个更高水平王牌敌机</span></div>
+      <div class="set-ctrl"><button id="optBotDiff" class="seg-btn" type="button">标准新兵</button></div>
     </div>
 
     <div class="settings-foot">
@@ -936,28 +1014,60 @@
         <button id="btnLanBot" class="seg-btn" type="button">AI 敌机: 关闭</button>
       </div>
     </div>
-    <div class="lan-grid">
-      <div class="lan-card">
-        <h3 data-i18n="lanHostHead">① 房主建房 (支持 2~6 人自由空战)</h3>
-        <div class="lan-btn-row">
-          <button id="btnHostCreate" class="seg-btn" type="button" data-i18n="lanHostCreate">生成邀请码</button>
-          <button id="btnCopyOffer" class="seg-btn" type="button" data-i18n="lanCopyOffer">复制邀请码</button>
-        </div>
-        <textarea id="lanOfferOut" class="lan-token" readonly placeholder="点击生成邀请码发给好友（每新增一名玩家重新点一次）..."></textarea>
-        <textarea id="lanAnswerIn" class="lan-token" placeholder="粘贴好友发回的应答码 (PTL1-...)"></textarea>
-        <button id="btnHostAccept" class="seg-btn" type="button" data-i18n="lanHostAccept">确认接入该玩家</button>
+    <div id="lanIpv6Bar" class="lan-ipv6-bar">
+      <div class="lan-ipv6-info">
+        <span id="lanIpv6Pill" class="lan-ipv6-pill">正在检测 IPv6 网络环境...</span>
+        <span id="lanMyIpv6Text" class="lan-ipv6-addr">--</span>
       </div>
-      <div class="lan-card">
-        <h3 data-i18n="lanGuestHead">② 好友加入房间</h3>
-        <textarea id="lanOfferIn" class="lan-token" placeholder="粘贴房主的邀请码 (PTL1-...)"></textarea>
-        <div class="lan-btn-row">
-          <button id="btnGuestJoin" class="seg-btn" type="button" data-i18n="lanGuestJoin">生成应答码</button>
-          <button id="btnCopyAnswer" class="seg-btn" type="button" data-i18n="lanCopyAnswer">复制应答码</button>
-        </div>
-        <textarea id="lanAnswerOut" class="lan-token" readonly placeholder="生成后复制此应答码发回给房主即可连入..."></textarea>
+      <div class="lan-btn-row" style="gap:5px;">
+        <button id="btnCopyIpv6" class="seg-btn" type="button" style="padding:4px 8px;font-size:10px;min-width:0;">复制地址</button>
+        <button id="btnRecheckIpv6" class="seg-btn" type="button" style="padding:4px 8px;font-size:10px;min-width:0;">重测</button>
       </div>
     </div>
-    <div id="lanStatusText" class="lan-status">同 Wi-Fi / 热点或公网下无需服务器，互换口令即可自由混战</div>
+    <div class="lan-grid">
+      <div class="lan-card">
+        <h3 data-i18n="lanHostHead">① 房主直连开房 (发 IPv6 给好友即可直连)</h3>
+        <input id="lanHostAddrInput" class="lan-addr-input" placeholder="自动填入公网 IPv6 或房号..." />
+        <div class="lan-btn-row">
+          <button id="btnStartDirectHost" class="seg-btn" type="button" data-i18n="lanStartDirect">开启直连房间</button>
+          <button id="btnCopyDirectHost" class="seg-btn" type="button" data-i18n="lanCopyAddr">复制地址给好友</button>
+        </div>
+        <div style="font-size:10px;color:#9bb6d4;line-height:1.4;">开启后好友只需粘贴此地址并点“直连加入”，支持 2~6 人自动逐个接入。</div>
+      </div>
+      <div class="lan-card">
+        <h3 data-i18n="lanGuestHead">② 好友输入地址直接加入</h3>
+        <input id="lanGuestHostAddr" class="lan-addr-input" placeholder="粘贴房主发来的 IPv6 地址或房号..." />
+        <div class="lan-btn-row">
+          <button id="btnJoinDirectHost" class="seg-btn" type="button" data-i18n="lanJoinDirect">直连加入房间</button>
+        </div>
+        <div style="font-size:10px;color:#9bb6d4;line-height:1.4;">优先 IPv6 / STUN 直连；若遇防火墙、严格 NAT 或代理拦截，4 秒自动切换加密中继保底（100% 必通）！</div>
+      </div>
+    </div>
+    <details class="lan-fold">
+      <summary>高级 / 纯内网无互联网离线口令模式（手动交换 PTL1 口令）</summary>
+      <div class="lan-grid">
+        <div class="lan-card">
+          <h3>手动生成邀请码 (PTL1)</h3>
+          <div class="lan-btn-row">
+            <button id="btnHostCreate" class="seg-btn" type="button" data-i18n="lanHostCreate">生成邀请码</button>
+            <button id="btnCopyOffer" class="seg-btn" type="button" data-i18n="lanCopyOffer">复制邀请码</button>
+          </div>
+          <textarea id="lanOfferOut" class="lan-token" readonly placeholder="点击生成邀请码发给好友（每新增一名玩家重新点一次）..."></textarea>
+          <textarea id="lanAnswerIn" class="lan-token" placeholder="粘贴好友发回的应答码 (PTL1-...)"></textarea>
+          <button id="btnHostAccept" class="seg-btn" type="button" data-i18n="lanHostAccept">确认接入该玩家</button>
+        </div>
+        <div class="lan-card">
+          <h3>手动填入邀请码加入</h3>
+          <textarea id="lanOfferIn" class="lan-token" placeholder="粘贴房主的邀请码 (PTL1-...)"></textarea>
+          <div class="lan-btn-row">
+            <button id="btnGuestJoin" class="seg-btn" type="button" data-i18n="lanGuestJoin">生成应答码</button>
+            <button id="btnCopyAnswer" class="seg-btn" type="button" data-i18n="lanCopyAnswer">复制应答码</button>
+          </div>
+          <textarea id="lanAnswerOut" class="lan-token" readonly placeholder="生成后复制此应答码发回给房主即可连入..."></textarea>
+        </div>
+      </div>
+    </details>
+    <div id="lanStatusText" class="lan-status">支持 IPv6 直连 & 双栈 STUN 穿透：房主复制地址发给好友即可 1 步开飞</div>
     <div id="lanPeerList" class="lan-peers">当前暂无联机玩家</div>
     <div class="settings-foot">
       <button id="btnLanDisconnect" class="rbtn secondary" type="button" data-i18n="lanDisconnect">断开全部连接</button>
@@ -3163,7 +3273,8 @@
     gunSpread: 'NORMAL',    // 'TIGHT' | 'NORMAL' | 'WIDE'
     rsAutoCenter: false,    // false: sticky RS aim (R3 to center), true: auto-recenter on release
     deadzone: 0.10,
-    rumble: true
+    rumble: true,
+    botDiff: 'NORMAL'       // 'NORMAL' | 'VETERAN' | 'LEGEND'
   };
 
   const settings = { ...DEFAULT_SETTINGS };
@@ -3211,15 +3322,18 @@
       rsStay: '不回中 (R3居中)', rsCenter: '自动回中',
       lblDeadzone: '手柄摇杆死区', subDeadzone: 'Xbox 模拟摇杆防漂移死区',
       lblRumble: '手柄震动反馈', subRumble: '喷气、机枪、导弹与干扰震动',
+      lblBotDiff: '敌机 AI 难度', subBotDiff: '切换普通或 2 个更高水平王牌敌机',
+      bdNORMAL: '标准新兵', bdVETERAN: '王牌精英', bdLEGEND: '苍穹死神',
       on: '开启', off: '关闭',
       btnReset: '恢复默认', btnResume: '返回飞行',
       setPadHint: '手柄 / 键盘: ↑↓ 选择 · ←→ 或 A/回车 调节 · B/ESC 返回',
       barHits: '击毁', barHp: '生命', barJet: '喷气', barEcm: '干扰', barGun: '机枪', barMsl: '导弹', barSet: '设置',
       botJoin: '加入敌机', botActive: '对战中',
-      lanBtn: '联机', lanTitle: '免服联机空战 · WEBRTC P2P',
-      lanCallsign: '呼号', lanHostHead: '① 房主建房 (支持 2~6 人自由空战)',
+      lanBtn: '联机', lanTitle: '免服联机空战 · IPV6 / WEBRTC P2P',
+      lanCallsign: '呼号', lanHostHead: '① 房主直连开房 (发 IPv6 给好友即可直连)',
+      lanStartDirect: '开启直连房间', lanCopyAddr: '复制地址给好友',
       lanHostCreate: '生成邀请码', lanCopyOffer: '复制邀请码', lanHostAccept: '确认接入该玩家',
-      lanGuestHead: '② 好友加入房间', lanGuestJoin: '生成应答码', lanCopyAnswer: '复制应答码',
+      lanGuestHead: '② 好友输入地址直接加入', lanJoinDirect: '直连加入房间', lanGuestJoin: '生成应答码', lanCopyAnswer: '复制应答码',
       lanDisconnect: '断开全部连接',
       lanPeerHit: '命中玩家！', lanPeerKill: '+1 击落玩家 ',
       botJoinedToast: '王牌敌机已加入空战！', botLeftToast: '已退出敌机对战',
@@ -3288,15 +3402,18 @@
       rsStay: 'HOLD (R3 CTR)', rsCenter: 'AUTO-CENTER',
       lblDeadzone: 'STICK DEADZONE', subDeadzone: 'Xbox analog deadzone',
       lblRumble: 'PAD VIBRATION', subRumble: 'Xbox dual-rumble feedback',
+      lblBotDiff: 'RIVAL BOT DIFFICULTY', subBotDiff: 'Standard, Veteran, or Ace Legend AI',
+      bdNORMAL: 'STANDARD', bdVETERAN: 'VETERAN ACE', bdLEGEND: 'SKY LEGEND',
       on: 'ON', off: 'OFF',
       btnReset: 'RESET DEFAULTS', btnResume: 'RESUME FLIGHT',
       setPadHint: 'PAD / KEY: UP/DOWN SELECT · L/R OR A ADJUST · B/ESC CLOSE',
       barHits: 'HITS', barHp: 'HP', barJet: 'JET', barEcm: 'ECM', barGun: 'GUN', barMsl: 'MSL', barSet: 'SET',
       botJoin: '+ BOT', botActive: 'BOT ON',
-      lanBtn: 'LAN', lanTitle: 'SERVERLESS MULTIPLAYER · WEBRTC P2P',
-      lanCallsign: 'CALLSIGN', lanHostHead: '1. HOST ROOM (2-6 PILOTS FFA)',
+      lanBtn: 'LAN', lanTitle: 'SERVERLESS P2P · IPV6 / WEBRTC',
+      lanCallsign: 'CALLSIGN', lanHostHead: '1. HOST DIRECT ROOM (SEND IPV6 TO FRIEND)',
+      lanStartDirect: 'START DIRECT HOST', lanCopyAddr: 'COPY HOST ADDR',
       lanHostCreate: 'CREATE INVITE', lanCopyOffer: 'COPY INVITE', lanHostAccept: 'ACCEPT PILOT ANSWER',
-      lanGuestHead: '2. JOIN ROOM', lanGuestJoin: 'CREATE ANSWER', lanCopyAnswer: 'COPY ANSWER',
+      lanGuestHead: '2. JOIN BY HOST IPV6 / CODE', lanJoinDirect: 'DIRECT JOIN', lanGuestJoin: 'CREATE ANSWER', lanCopyAnswer: 'COPY ANSWER',
       lanDisconnect: 'DISCONNECT ALL',
       lanPeerHit: 'HIT PILOT!', lanPeerKill: '+1 SHOT DOWN ',
       botJoinedToast: 'RIVAL ACE BOT JOINED!', botLeftToast: 'RIVAL BOT REMOVED',
@@ -3403,14 +3520,49 @@
   const JET_DEPLETED_CD = 9.0;     // long overheat cooldown when jet energy hits 0
   const MAX_ECM_CHARGES = 2;       // Stores up to 2 ECM countermeasures
   const ECM_ACTIVE_TIME = 2.6;     // active jamming window
-  const ECM_COOLDOWN = 7.0;        // Faster 7.0s per-charge cooldown
+  const ECM_COOLDOWN = 12.5;       // Longer 12.5s per-charge cooldown for tactical pacing
   const MISSILE_MAX_SPEED = 285.0; // Nerfed tactical missile speed (evadable!)
   const MISSILE_ACCEL = 145.0;
   const MISSILE_TURN_RATE = 7.2;   // Nerfed turn rate so high-G maneuvers can break lock
   const MISSILE_GIMBAL_COS = 0.20; // ~78 deg seeker cone limit
   const BOT_FOV_COS = Math.cos(22 * Math.PI / 180); // Bot +/-22 deg strict nose radar cone
   const BOT_LOCK_REQUIRED = 2.2;
-  const BOT_ECM_COOLDOWN = 13.5;
+  const BOT_ECM_COOLDOWN = 15.0;
+  const BOT_PROFILES = {
+    NORMAL: {
+      tier: 'NORMAL', tag: 'BOT', hp: 100, ecmCharges: 1,
+      pitchRate: 1.05, rollRate: 1.65, yawRate: 0.55, bankTurn: 0.48,
+      baseSpeed: 140, jetAdd: 96, minSpeed: 88, maxSpeed: 246,
+      fovCos: BOT_FOV_COS, lockRequired: 2.2, missileCd: 8.5, initialMslCd: 4.2,
+      ecmChance: 0.38, ecmCd: 15.0, barrelAvoidChance: 0.65,
+      gunSpreadMul: 1.65, gunBulletDmg: 0.75, missileDmg: 36,
+      gunRange: 460, gunConeCos: 0.978, burstPeriod: 1.65, burstLen: 0.50,
+      pursuitCap: 5.2, wanderAmt: 1.0, leadSpeedScale: 0.92, canZeroBrake: false
+    },
+    VETERAN: {
+      tier: 'VETERAN', tag: 'VET', hp: 130, ecmCharges: 2,
+      pitchRate: 1.42, rollRate: 2.25, yawRate: 0.76, bankTurn: 0.56,
+      baseSpeed: 148, jetAdd: 112, minSpeed: 64, maxSpeed: 274,
+      fovCos: Math.cos(26 * Math.PI / 180), lockRequired: 1.55, missileCd: 5.6, initialMslCd: 3.0,
+      ecmChance: 0.65, ecmCd: 11.5, barrelAvoidChance: 0.85,
+      gunSpreadMul: 1.15, gunBulletDmg: 1.15, missileDmg: 42,
+      gunRange: 540, gunConeCos: 0.968, burstPeriod: 1.35, burstLen: 0.62,
+      pursuitCap: 7.4, wanderAmt: 0.42, leadSpeedScale: 1.0, canZeroBrake: true
+    },
+    LEGEND: {
+      tier: 'LEGEND', tag: 'ACE', hp: 160, ecmCharges: 2,
+      pitchRate: 1.72, rollRate: 2.75, yawRate: 0.92, bankTurn: 0.64,
+      baseSpeed: 154, jetAdd: 124, minSpeed: 54, maxSpeed: 290,
+      fovCos: Math.cos(29 * Math.PI / 180), lockRequired: 1.10, missileCd: 3.8, initialMslCd: 2.2,
+      ecmChance: 0.88, ecmCd: 9.0, barrelAvoidChance: 0.98,
+      gunSpreadMul: 0.78, gunBulletDmg: 1.50, missileDmg: 48,
+      gunRange: 620, gunConeCos: 0.958, burstPeriod: 1.15, burstLen: 0.75,
+      pursuitCap: 10.5, wanderAmt: 0.14, leadSpeedScale: 1.05, canZeroBrake: true
+    }
+  };
+  function getBotProfile() {
+    return BOT_PROFILES[settings.botDiff] || BOT_PROFILES.NORMAL;
+  }
 
   const plane = {
     isBot: false,
@@ -3552,8 +3704,387 @@
     kills: 0,
     deaths: 0,
     ambientLevel: 0,
-    statusMsg: ''
+    statusMsg: '',
+    directRoomAddr: '',
+    directFallbackCode: 'SKY-' + String(Math.floor(1000 + Math.random() * 9000)),
+    directMqtt: null,
+    pendingDirectMap: new Map(),
+    ipv6Promise: null,
+    ipv6: {
+      state: 'idle', // 'idle' | 'probing' | 'public' | 'local' | 'none'
+      publicIp: '',
+      localIp: '',
+      probeAt: 0
+    }
   };
+
+  const RTC_ICE_SERVERS_V6 = [
+    { urls: 'stun:stun.miwifi.com:3478' },
+    { urls: 'stun:stun.qq.com:3478' },
+    { urls: 'stun:stun.cloudflare.com:3478' },
+    { urls: 'stun:[2606:4700:49::]:3478' },
+    { urls: 'stun:[2a01:4f8:1c1e:d769::1]:3478' },
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:[2001:4860:4864:5:8000::1]:19302' }
+  ];
+  const RTC_ICE_SERVERS_SAFE = [
+    { urls: 'stun:stun.miwifi.com:3478' },
+    { urls: 'stun:stun.qq.com:3478' },
+    { urls: 'stun:stun.cloudflare.com:3478' },
+    { urls: 'stun:stun.nextcloud.com:3478' },
+    { urls: 'stun:stun.l.google.com:19302' }
+  ];
+  const MQTT_WSS_BROKERS = [
+    'wss://broker.emqx.io:8084/mqtt',
+    'wss://broker.hivemq.com:8884/mqtt'
+  ];
+
+  function encodeMqttRemLen(n) {
+    const out = [];
+    let x = n;
+    do {
+      let b = x % 128;
+      x = Math.floor(x / 128);
+      if (x > 0) b |= 128;
+      out.push(b);
+    } while (x > 0);
+    return out;
+  }
+
+  function createMqttWssClient(urls = MQTT_WSS_BROKERS) {
+    let closed = false;
+    let nextMid = 1;
+    const enc = new TextEncoder();
+    const dec = new TextDecoder();
+    const openConns = new Set(); // active { url, sock, pingTimer }
+    const subs = new Map();      // topic -> handler
+    const pendingSubs = new Map();
+    const seenMsgs = new Set();
+
+    function buildStr(s) {
+      const b = enc.encode(s);
+      return [b.length >> 8, b.length & 255, ...b];
+    }
+    function buildPkt(hdr, body) {
+      const rl = encodeMqttRemLen(body.length);
+      const out = new Uint8Array(1 + rl.length + body.length);
+      out[0] = hdr;
+      out.set(rl, 1);
+      out.set(body, 1 + rl.length);
+      return out;
+    }
+    function rememberMsg(key) {
+      if (seenMsgs.has(key)) return false;
+      seenMsgs.add(key);
+      if (seenMsgs.size > 800) {
+        const first = seenMsgs.values().next().value;
+        seenMsgs.delete(first);
+      }
+      return true;
+    }
+    function sendSubscribeOnConn(conn, topic) {
+      if (!conn || !conn.sock || conn.sock.readyState !== 1) return null;
+      const mid = nextMid = (nextMid % 65000) + 1;
+      conn.sock.send(buildPkt(0x82, [mid >> 8, mid & 255, ...buildStr(topic), 1]));
+      return mid;
+    }
+
+    function connectOne(url) {
+      return new Promise((resolve, reject) => {
+        let settled = false;
+        let conn = null;
+        let sockRxBuf = new Uint8Array(0);
+        const sock = new WebSocket(url, 'mqtt');
+        sock.binaryType = 'arraybuffer';
+        const timer = setTimeout(() => {
+          if (!settled) { settled = true; try { sock.close(); } catch {} reject(new Error('信令服务器超时')); }
+        }, 15000);
+
+        sock.onopen = () => {
+          if (closed) { try { sock.close(); } catch {} return; }
+          const cid = 'ptl_' + Math.random().toString(36).slice(2, 10);
+          const body = [
+            0, 4, 77, 81, 84, 84, // MQTT
+            4,                    // v3.1.1
+            2,                    // CleanSession
+            0, 45,                // KeepAlive 45s
+            ...buildStr(cid)
+          ];
+          sock.send(buildPkt(0x10, body));
+        };
+
+        sock.onmessage = (ev) => {
+          const chunk = new Uint8Array(ev.data);
+          const merged = new Uint8Array(sockRxBuf.length + chunk.length);
+          merged.set(sockRxBuf, 0);
+          merged.set(chunk, sockRxBuf.length);
+          sockRxBuf = merged;
+
+          while (sockRxBuf.length >= 2) {
+            const hdr = sockRxBuf[0];
+            let mult = 1, remLen = 0, pos = 1, done = false;
+            while (pos < sockRxBuf.length && pos <= 5) {
+              const b = sockRxBuf[pos++];
+              remLen += (b & 127) * mult;
+              if ((b & 128) === 0) { done = true; break; }
+              mult *= 128;
+            }
+            if (!done || sockRxBuf.length < pos + remLen) break;
+            const body = sockRxBuf.subarray(pos, pos + remLen);
+            sockRxBuf = sockRxBuf.subarray(pos + remLen);
+            const pktType = hdr >> 4;
+            if (pktType === 2) { // CONNACK
+              clearTimeout(timer);
+              if (closed) { try { sock.close(); } catch {} if (!settled) { settled = true; reject(new Error('已取消')); } return; }
+              const localPing = setInterval(() => {
+                if (sock.readyState === 1) sock.send(new Uint8Array([0xc0, 0x00]));
+              }, 25000);
+              conn = { url, sock, pingTimer: localPing };
+              openConns.add(conn);
+              for (const topic of subs.keys()) sendSubscribeOnConn(conn, topic);
+              if (!settled) {
+                settled = true;
+                resolve(conn);
+              }
+            } else if (pktType === 9 && body.length >= 2) { // SUBACK
+              const mid = (body[0] << 8) | body[1];
+              const cb = pendingSubs.get(mid);
+              if (cb) { pendingSubs.delete(mid); cb(); }
+            } else if (pktType === 3 && body.length >= 2) { // PUBLISH
+              const tLen = (body[0] << 8) | body[1];
+              const topic = dec.decode(body.subarray(2, 2 + tLen));
+              const qos = (hdr >> 1) & 3;
+              if (qos === 1 && body.length >= 4 + tLen && sock.readyState === 1) {
+                sock.send(new Uint8Array([0x40, 0x02, body[2 + tLen], body[3 + tLen]]));
+              }
+              const pStart = 2 + tLen + (qos > 0 ? 2 : 0);
+              const payload = dec.decode(body.subarray(pStart));
+              if (!rememberMsg(topic + '|' + payload)) continue;
+              for (const [subTopic, handler] of subs.entries()) {
+                if (subTopic === topic || (subTopic.endsWith('/#') && topic.startsWith(subTopic.slice(0, -1)))) {
+                  try { handler(payload, topic); } catch {}
+                }
+              }
+            }
+          }
+        };
+
+        sock.onerror = () => {
+          clearTimeout(timer);
+          if (conn) { clearInterval(conn.pingTimer); openConns.delete(conn); conn = null; }
+          if (!settled) { settled = true; reject(new Error('信令连接失败')); }
+        };
+        sock.onclose = () => {
+          clearTimeout(timer);
+          if (conn) { clearInterval(conn.pingTimer); openConns.delete(conn); conn = null; }
+          if (!settled) { settled = true; reject(new Error('信令连接关闭')); }
+        };
+      });
+    }
+
+    return {
+      async connect() {
+        if (closed) throw new Error('已取消');
+        try {
+          await Promise.any(urls.map(connectOne));
+          if (closed) throw new Error('已取消');
+          return true;
+        } catch (err) {
+          throw new Error('公共信令节点暂不可用，请展开下方离线口令模式');
+        }
+      },
+      subscribe(topic, handler) {
+        subs.set(topic, handler);
+        if (openConns.size === 0) return Promise.resolve();
+        const mids = [];
+        for (const c of openConns) {
+          const mid = sendSubscribeOnConn(c, topic);
+          if (mid != null) mids.push(mid);
+        }
+        if (mids.length === 0) return Promise.resolve();
+        return new Promise((resolve) => {
+          let done = false;
+          const finish = () => {
+            if (done) return;
+            done = true;
+            clearTimeout(t);
+            for (const m of mids) pendingSubs.delete(m);
+            resolve();
+          };
+          const t = setTimeout(finish, 5000);
+          for (const m of mids) pendingSubs.set(m, finish);
+        });
+      },
+      publish(topic, str, qos = 1) {
+        if (openConns.size === 0) return false;
+        const pBytes = enc.encode(str);
+        const tBytes = buildStr(topic);
+        let sent = false;
+        for (const c of openConns) {
+          if (c.sock && c.sock.readyState === 1) {
+            if (qos === 0) {
+              c.sock.send(buildPkt(0x30, [...tBytes, ...pBytes]));
+            } else {
+              const mid = nextMid = (nextMid % 65000) + 1;
+              c.sock.send(buildPkt(0x32, [...tBytes, mid >> 8, mid & 255, ...pBytes]));
+            }
+            sent = true;
+          }
+        }
+        return sent;
+      },
+      close() {
+        closed = true;
+        for (const c of openConns) {
+          if (c.pingTimer) clearInterval(c.pingTimer);
+          try { if (c.sock) c.sock.close(); } catch {}
+        }
+        openConns.clear();
+        subs.clear();
+        pendingSubs.clear();
+      }
+    };
+  }
+
+  function hashDirectRoomKey(addr) {
+    const clean = String(addr || '').trim().toLowerCase().replace(/^\[|\]$/g, '');
+    let h1 = 0x811c9dc5 >>> 0;
+    let h2 = 0x9e3779b9 >>> 0;
+    for (let i = 0; i < clean.length; i++) {
+      const c = clean.charCodeAt(i);
+      h1 = Math.imul(h1 ^ c, 0x01000193) >>> 0;
+      h2 = Math.imul(h2 ^ (c + i), 0x85ebca6b) >>> 0;
+    }
+    return h1.toString(36) + '_' + h2.toString(36);
+  }
+
+  function extractIpv6FromString(raw) {
+    const s = String(raw || '').trim().replace(/^\[|\]$/g, '');
+    if (!s.includes(':') || s.includes(' ') || s.length > 45) return '';
+    if (!/^[0-9a-f:]+$/i.test(s)) return '';
+    return s.toLowerCase();
+  }
+
+  function probeIpv6Support() {
+    if (net.ipv6.state === 'probing' && net.ipv6Promise) return net.ipv6Promise;
+    net.ipv6.state = 'probing';
+    net.ipv6.publicIp = '';
+    net.ipv6.localIp = '';
+    updateLanUI();
+
+    const p = (async () => {
+      let foundPublic = '';
+      let foundIcePublic = '';
+      let foundLocal = '';
+
+      // 1) WebRTC ICE dual-stack candidate scan (finds global unicast 2xxx:/3xxx: & local fe80:/fdxx:)
+      const iceProbe = (async () => {
+        let pc = null;
+        try {
+          pc = createRtcPc();
+          pc.createDataChannel('v6probe');
+          await new Promise((resolve) => {
+            let done = false;
+            const finish = () => { if (!done) { done = true; resolve(); } };
+            const t = setTimeout(finish, 2200);
+            pc.onicecandidate = (ev) => {
+              if (!ev.candidate) { clearTimeout(t); finish(); return; }
+              const cand = ev.candidate.candidate || '';
+              const m = cand.match(/\s([0-9a-f:]{4,45})\s+\d+\s+typ\s/i);
+              if (m && m[1].includes(':')) {
+                const ip = m[1].toLowerCase();
+                if (/^[23][0-9a-f]{0,3}:/i.test(ip) && !foundIcePublic) foundIcePublic = ip;
+                else if (!foundLocal) foundLocal = ip;
+              }
+            };
+            pc.createOffer().then((o) => pc.setLocalDescription(o)).catch(finish);
+          });
+        } catch {}
+        try { if (pc) pc.close(); } catch {}
+      })();
+
+      // 2) Domestic-Direct-First IPv6 HTTP echo (avoids picking foreign VPN exit over domestic 240e/2409/2408!)
+      const fetchIpv6From = async (u, ms = 2000) => {
+        const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+        const t = setTimeout(() => { try { if (ctrl) ctrl.abort(); } catch {} }, ms);
+        try {
+          const res = await fetch(u, { signal: ctrl ? ctrl.signal : undefined, cache: 'no-store' });
+          const txt = await res.text();
+          const ip = extractIpv6FromString(txt.trim());
+          if (!ip || ip.startsWith('fe80:')) throw new Error('not public v6');
+          return ip;
+        } finally {
+          clearTimeout(t);
+        }
+      };
+      const httpProbe = (async () => {
+        try {
+          foundPublic = await Promise.any([
+            fetchIpv6From('https://6.ipw.cn', 2000),
+            fetchIpv6From('https://speed.neu6.edu.cn/getIP.php', 2000)
+          ]);
+        } catch {
+          try {
+            foundPublic = await Promise.any([
+              fetchIpv6From('https://api6.ipify.org', 2200),
+              fetchIpv6From('https://ipv6.icanhazip.com', 2200)
+            ]);
+          } catch {}
+        }
+      })();
+
+      await Promise.allSettled([iceProbe, httpProbe]);
+
+      const isDomesticV6 = (ip) => /^(2408|2409|240e|240c):/i.test(String(ip || ''));
+      if (isDomesticV6(foundIcePublic) && (!foundPublic || !isDomesticV6(foundPublic))) {
+        foundPublic = foundIcePublic;
+      } else if (!foundPublic && foundIcePublic) {
+        foundPublic = foundIcePublic;
+      }
+
+      net.ipv6.publicIp = foundPublic;
+      net.ipv6.localIp = foundLocal;
+      net.ipv6.probeAt = Date.now();
+      net.ipv6.state = foundPublic ? 'public' : (foundLocal ? 'local' : 'none');
+
+      if (lanHostAddrInput && (!lanHostAddrInput.value.trim() || lanHostAddrInput.value.startsWith('SKY-') || lanHostAddrInput.value.includes(':'))) {
+        lanHostAddrInput.value = foundPublic || net.directRoomAddr || net.directFallbackCode;
+      }
+      updateLanUI();
+      return { ...net.ipv6, recommendedAddr: foundPublic || net.directFallbackCode };
+    })();
+    net.ipv6Promise = p;
+    p.finally(() => { if (net.ipv6Promise === p) net.ipv6Promise = null; });
+    return p;
+  }
+
+  async function checkPeerTransportIpv6(pc, peerObj) {
+    if (!pc || typeof pc.getStats !== 'function' || !peerObj) return;
+    try {
+      const stats = await pc.getStats();
+      let selectedPair = null;
+      stats.forEach((r) => {
+        if (r.type === 'transport' && r.selectedCandidatePairId) {
+          selectedPair = stats.get(r.selectedCandidatePairId);
+        }
+      });
+      if (!selectedPair) {
+        stats.forEach((r) => {
+          if (r.type === 'candidate-pair' && r.state === 'succeeded' && (r.nominated || !selectedPair)) {
+            selectedPair = r;
+          }
+        });
+      }
+      if (selectedPair) {
+        const rc = stats.get(selectedPair.remoteCandidateId);
+        const lc = stats.get(selectedPair.localCandidateId);
+        const rAddr = (rc && (rc.address || rc.ip)) || '';
+        const lAddr = (lc && (lc.address || lc.ip)) || '';
+        peerObj.proto = (rAddr.includes(':') || lAddr.includes(':')) ? 'IPv6' : 'IPv4';
+        updateLanUI();
+      }
+    } catch {}
+  }
 
   function b64UrlEncode(bytes) {
     let bin = '';
@@ -3599,7 +4130,31 @@
     return JSON.parse(new TextDecoder().decode(bytes));
   }
   function createRtcPc() {
-    return new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+    try {
+      return new RTCPeerConnection({ iceServers: RTC_ICE_SERVERS_V6 });
+    } catch {
+      return new RTCPeerConnection({ iceServers: RTC_ICE_SERVERS_SAFE });
+    }
+  }
+  function isPublicIpv6(ip) {
+    return /^[23][0-9a-f]{0,3}:/i.test(String(ip || '').trim());
+  }
+  function expandCandidateWithPublicIpv6(candInit, knownPublicIpv6) {
+    if (!candInit || !candInit.candidate) return [];
+    const list = [candInit];
+    const v6 = extractIpv6FromString(knownPublicIpv6);
+    if (v6 && isPublicIpv6(v6) && /\.local\s+\d+\s+typ\s+host/i.test(candInit.candidate) && /\s+udp\s+/i.test(candInit.candidate)) {
+      const v6CandStr = candInit.candidate
+        .replace(/[0-9a-f-]+\.local/i, v6)
+        .replace(/candidate:(\S+)/, 'candidate:$1v6');
+      list.push({
+        candidate: v6CandStr,
+        sdpMid: candInit.sdpMid,
+        sdpMLineIndex: candInit.sdpMLineIndex,
+        usernameFragment: candInit.usernameFragment
+      });
+    }
+    return list;
   }
   async function gatherLocalDescription(pc) {
     if (pc.iceGatheringState === 'complete') return pc.localDescription;
@@ -3618,9 +4173,9 @@
       const onState = () => { if (pc.iceGatheringState === 'complete') finish(); };
       const onCand = (ev) => {
         if (!ev.candidate) { finish(); return; }
-        if (!postCandTimer) postCandTimer = setTimeout(finish, 480);
+        if (!postCandTimer) postCandTimer = setTimeout(finish, 1400);
       };
-      const maxTimer = setTimeout(finish, 1450);
+      const maxTimer = setTimeout(finish, 3200);
       pc.addEventListener('icegatheringstatechange', onState);
       pc.addEventListener('icecandidate', onCand);
     });
@@ -3716,9 +4271,40 @@
     }
   }
 
+  function createRelayDc(sendFn) {
+    const ch = {
+      isRelay: true,
+      readyState: 'connecting',
+      onopen: null,
+      onmessage: null,
+      onclose: null,
+      onerror: null,
+      send(dataStr, fast = false) {
+        if (ch.readyState !== 'open') return;
+        sendFn(dataStr, Boolean(fast));
+      },
+      _open() {
+        if (ch.readyState === 'open') return;
+        ch.readyState = 'open';
+        if (typeof ch.onopen === 'function') ch.onopen({});
+      },
+      _deliver(dataStr) {
+        if (ch.readyState !== 'open') return;
+        if (typeof ch.onmessage === 'function') ch.onmessage({ data: dataStr });
+      },
+      close() {
+        if (ch.readyState === 'closed') return;
+        ch.readyState = 'closed';
+        if (typeof ch.onclose === 'function') ch.onclose({});
+      }
+    };
+    return ch;
+  }
+
   function sendRaw(dc, obj) {
     if (dc && dc.readyState === 'open') {
-      try { dc.send(JSON.stringify(obj)); } catch {}
+      const fast = (obj.t === 's' || obj.t === 'r' || obj.t === 'w');
+      try { dc.send(JSON.stringify(obj), fast); } catch {}
     }
   }
 
@@ -3844,36 +4430,63 @@
   function setupNetChannel(dc, peerObj, isHostSide) {
     dc.onopen = () => {
       net.active = true;
+      const wasRelay = Boolean(peerObj.usingRelay);
+      const alreadyJoined = Boolean(peerObj._joinedOnce);
+      peerObj._joinedOnce = true;
+      peerObj.dc = dc;
+      peerObj.usingRelay = Boolean(dc.isRelay);
+      peerObj.lastHeard = performance.now();
+
       if (isHostSide) {
         net.role = 'host';
         net.peers.set(peerObj.id, peerObj);
-        sendRaw(dc, {
-          t: 'welcome',
-          yourId: peerObj.id,
-          colorIdx: peerObj.colorIdx,
-          hostId: net.myId,
-          hostPos: plane.pos,
-          targetsEnabled: net.targetsEnabled,
-          botEnabled: bot.enabled
-        });
-        showFsToast(peerObj.callsign + ' 连入房间！');
+        if (!peerObj._welcomedGuest || !wasRelay) {
+          peerObj._welcomedGuest = true;
+          sendRaw(dc, {
+            t: 'welcome',
+            yourId: peerObj.id,
+            colorIdx: peerObj.colorIdx,
+            hostId: net.myId,
+            hostPos: plane.pos,
+            targetsEnabled: net.targetsEnabled,
+            botEnabled: bot.enabled
+          });
+        }
+        if (!alreadyJoined) showFsToast(peerObj.callsign + ' 连入房间！');
       } else {
         net.role = 'guest';
         net.hostConn = peerObj;
         net.peers.set(peerObj.id, peerObj);
       }
-      net.statusMsg = '通道已就绪 · 当前共 ' + (1 + net.peers.size) + ' 名飞行员在线';
+
+      if (dc.isRelay) {
+        peerObj.proto = 'RELAY';
+        net.statusMsg = '已启用加密中继保底 · 当前共 ' + (1 + net.peers.size) + ' 名飞行员在线';
+      } else {
+        if (wasRelay && alreadyJoined) showFsToast('已自动升级为 P2P 直连通道！');
+        if (peerObj.proto === 'RELAY') peerObj.proto = null;
+        checkPeerTransportIpv6(peerObj.pc, peerObj);
+        setTimeout(() => checkPeerTransportIpv6(peerObj.pc, peerObj), 1400);
+        net.statusMsg = 'P2P 直连通道已就绪 · 当前共 ' + (1 + net.peers.size) + ' 名飞行员在线';
+      }
       updateLanUI();
     };
     dc.onmessage = (ev) => {
       let msg;
       try { msg = JSON.parse(ev.data); } catch { return; }
+      peerObj.lastHeard = performance.now();
+      if (msg.t === 'bye') {
+        cleanup();
+        return;
+      }
       if (msg.t === 'welcome' && !isHostSide) {
         net.myId = msg.yourId;
         net.colorIdx = msg.colorIdx || 1;
         net.targetsEnabled = Boolean(msg.targetsEnabled);
         if (!net.targetsEnabled) aerialTargets.length = 0;
-        if (Array.isArray(msg.hostPos)) {
+        const firstWelcome = !peerObj._welcomed;
+        peerObj._welcomed = true;
+        if (firstWelcome && Array.isArray(msg.hostPos)) {
           const ang = Math.random() * Math.PI * 2;
           const sx = msg.hostPos[0] + Math.cos(ang) * 420;
           const sz = msg.hostPos[2] + Math.sin(ang) * 420;
@@ -3884,8 +4497,8 @@
           computePlaneBasis();
           cam.chaseFwd = [...plane.fwd]; cam.chaseUp = [...plane.up];
           peerObj.pos = [...msg.hostPos]; peerObj.targetPos = [...msg.hostPos];
+          showFsToast(peerObj.usingRelay ? '已通过加密中继连入空战房！' : '已连入联机空战房！');
         }
-        showFsToast('已连入联机空战房！');
         updateLanUI();
       } else if (msg.t === 's') {
         applyPeerSnapshot(msg);
@@ -3908,6 +4521,7 @@
       }
     };
     const cleanup = () => {
+      if (peerObj.dc && peerObj.dc !== dc) return; // Ignore stale RTC close after relay/hot-upgrade
       if (net.peers.has(peerObj.id)) {
         net.peers.delete(peerObj.id);
         showFsToast(peerObj.callsign + ' 已断开连接');
@@ -3982,17 +4596,486 @@
     return token;
   }
 
+  async function startDirectHostRoom(customAddr) {
+    if (net.ipv6.state === 'idle') probeIpv6Support();
+    if (net.ipv6Promise) {
+      await Promise.race([net.ipv6Promise, new Promise((r) => setTimeout(r, 2400))]);
+    }
+    const addr = String(customAddr || (lanHostAddrInput && lanHostAddrInput.value) || net.ipv6.publicIp || net.directFallbackCode).trim();
+    if (!addr) throw new Error('请输入或等待检测到房间地址');
+    if (net.directMqtt) { try { net.directMqtt.close(); } catch {} net.directMqtt = null; }
+    for (const entry of net.pendingDirectMap.values()) {
+      if (entry.resendTimer) clearInterval(entry.resendTimer);
+      try { if (entry.pc) entry.pc.close(); } catch {}
+    }
+    net.pendingDirectMap.clear();
+    net.role = 'host';
+    net.myId = 'p1';
+    net.colorIdx = 0;
+    net.directRoomAddr = addr;
+    if (lanHostAddrInput) lanHostAddrInput.value = addr;
+
+    const myKnownV6 = isPublicIpv6(net.ipv6.publicIp) ? net.ipv6.publicIp : (isPublicIpv6(extractIpv6FromString(addr)) ? extractIpv6FromString(addr) : '');
+    const hash = hashDirectRoomKey(addr);
+    const reqTopic = 'patrol_p2p_v6/' + hash + '/req';
+    let sigSeq = 1;
+    net.statusMsg = '正在启动直连信令监听...';
+    updateLanUI();
+
+    const mq = createMqttWssClient();
+    net.directMqtt = mq;
+    await mq.connect();
+
+    await mq.subscribe(reqTopic, async (payload) => {
+      let msg;
+      try { msg = JSON.parse(payload); } catch { return; }
+      if (!msg || !msg.gid) return;
+      const resTopic = 'patrol_p2p_v6/' + hash + '/res/' + msg.gid;
+
+      function ensureHostRelayOpen(rec) {
+        if (rec.rtcOpen) return;
+        if (!rec.relayDc) {
+          rec.relayDc = createRelayDc((pktStr, fast) => {
+            mq.publish(resTopic, JSON.stringify({ t: 'd', p: sigSeq++, m: pktStr }), fast ? 0 : 1);
+          });
+          setupNetChannel(rec.relayDc, rec.peerObj, true);
+        }
+        if (rec.relayDc.readyState !== 'open') {
+          rec.relayDc._open();
+        } else {
+          sendRaw(rec.relayDc, {
+            t: 'welcome',
+            yourId: rec.peerObj.id,
+            colorIdx: rec.peerObj.colorIdx,
+            hostId: net.myId,
+            hostPos: plane.pos,
+            targetsEnabled: net.targetsEnabled,
+            botEnabled: bot.enabled
+          });
+        }
+      }
+
+      if (msg.t === 'hi') {
+        if (net.peers.size >= 5) {
+          mq.publish(resTopic, JSON.stringify({ t: 'full', seq: sigSeq++ }));
+          return;
+        }
+        const existing = net.pendingDirectMap.get(msg.gid);
+        if (existing) {
+          if (existing.offerTok && !existing.rtcOpen) {
+            mq.publish(resTopic, JSON.stringify({ t: 'o', tok: existing.offerTok, seq: sigSeq++ }));
+            if (existing.localCands.length > 0) {
+              mq.publish(resTopic, JSON.stringify({ t: 'iceBatch', cands: existing.localCands, seq: sigSeq++ }));
+            }
+          } else {
+            existing.needResend = true;
+          }
+          return;
+        }
+
+        const pc = createRtcPc();
+        const dc = pc.createDataChannel('patrol');
+        const guestId = 'p' + net.nextGuestNum++;
+        const colorIdx = (parseInt(guestId.slice(1), 10) - 1) % peerFighterMeshes.length;
+        const peerObj = createPeerRecord(guestId, (msg.callsign || ('PILOT-' + guestId.slice(1))).slice(0, 10).toUpperCase(), colorIdx, pc, dc);
+        setupNetChannel(dc, peerObj, true);
+        const chainedOpen = dc.onopen;
+
+        const rec = {
+          pc, peerObj, rtcDc: dc, relayDc: null, offerTok: '', localCands: [], pendingRemoteCands: [],
+          remoteSet: false, answered: false, rtcOpen: false, needResend: false,
+          resendTimer: null, relayBackupTimer: null
+        };
+        net.pendingDirectMap.set(msg.gid, rec);
+
+        dc.onopen = (ev) => {
+          rec.rtcOpen = true;
+          if (rec.resendTimer) { clearInterval(rec.resendTimer); rec.resendTimer = null; }
+          if (rec.relayBackupTimer) { clearTimeout(rec.relayBackupTimer); rec.relayBackupTimer = null; }
+          if (chainedOpen) chainedOpen(ev);
+          if (rec.relayDc && rec.relayDc.readyState === 'open') {
+            try { rec.relayDc.close(); } catch {}
+          }
+        };
+
+        pc.onicecandidate = (ev) => {
+          if (!ev.candidate) return;
+          const expanded = expandCandidateWithPublicIpv6(ev.candidate.toJSON(), myKnownV6);
+          for (const c of expanded) {
+            rec.localCands.push(c);
+            mq.publish(resTopic, JSON.stringify({ t: 'ice', cand: c, seq: sigSeq++ }));
+          }
+        };
+
+        try {
+          const offer = await pc.createOffer();
+          await pc.setLocalDescription(offer);
+          const tok = await encodeSignalToken({ v: 1, t: 'o', sdp: pc.localDescription.sdp, name: net.callsign, cid: guestId });
+          rec.offerTok = tok;
+          mq.publish(resTopic, JSON.stringify({ t: 'o', tok, seq: sigSeq++ }));
+          if (rec.localCands.length > 0) {
+            mq.publish(resTopic, JSON.stringify({ t: 'iceBatch', cands: rec.localCands, seq: sigSeq++ }));
+          }
+          net.statusMsg = '收到 ' + peerObj.callsign + ' 连接请求，正在尝试直连（超时自动切中继）...';
+          updateLanUI();
+
+          let resendCount = 0;
+          rec.resendTimer = setInterval(() => {
+            resendCount++;
+            if (rec.answered || rec.rtcOpen || rec.relayDc || resendCount > 6 || !net.directMqtt) {
+              clearInterval(rec.resendTimer);
+              rec.resendTimer = null;
+              return;
+            }
+            mq.publish(resTopic, JSON.stringify({ t: 'o', tok: rec.offerTok, seq: sigSeq++ }));
+            if (rec.localCands.length > 0) {
+              mq.publish(resTopic, JSON.stringify({ t: 'iceBatch', cands: rec.localCands, seq: sigSeq++ }));
+            }
+          }, 2400);
+        } catch (err) {
+          if (rec.resendTimer) clearInterval(rec.resendTimer);
+          net.pendingDirectMap.delete(msg.gid);
+          try { pc.close(); } catch {}
+        }
+      } else if (msg.t === 'a' && msg.tok) {
+        const rec = net.pendingDirectMap.get(msg.gid);
+        if (!rec) return;
+        mq.publish(resTopic, JSON.stringify({ t: 'ackA', seq: sigSeq++ }));
+        if (rec.answered) return;
+        try {
+          const data = await decodeSignalToken(msg.tok);
+          if (data.t !== 'a' || !data.sdp) return;
+          rec.answered = true;
+          if (rec.resendTimer) { clearInterval(rec.resendTimer); rec.resendTimer = null; }
+          if (data.name) rec.peerObj.callsign = String(data.name).slice(0, 10).toUpperCase();
+          await rec.pc.setRemoteDescription({ type: 'answer', sdp: data.sdp });
+          rec.remoteSet = true;
+          while (rec.pendingRemoteCands.length > 0) {
+            const c = rec.pendingRemoteCands.shift();
+            try { await rec.pc.addIceCandidate(c); } catch {}
+          }
+          if (!rec.relayBackupTimer && !rec.rtcOpen && !rec.relayDc) {
+            rec.relayBackupTimer = setTimeout(() => {
+              if (!rec.rtcOpen && net.directMqtt === mq) ensureHostRelayOpen(rec);
+            }, 4600);
+          }
+          net.statusMsg = '已收到 ' + rec.peerObj.callsign + ' 应答，正在打通 IPv6 / P2P 通道...';
+          updateLanUI();
+        } catch {}
+      } else if (msg.t === 'relayReady') {
+        const rec = net.pendingDirectMap.get(msg.gid);
+        if (!rec || rec.rtcOpen) return;
+        rec.answered = true;
+        if (rec.resendTimer) { clearInterval(rec.resendTimer); rec.resendTimer = null; }
+        if (rec.relayBackupTimer) { clearTimeout(rec.relayBackupTimer); rec.relayBackupTimer = null; }
+        if (msg.callsign) rec.peerObj.callsign = String(msg.callsign).slice(0, 10).toUpperCase();
+        ensureHostRelayOpen(rec);
+      } else if (msg.t === 'd' && typeof msg.m === 'string') {
+        const rec = net.pendingDirectMap.get(msg.gid);
+        if (!rec || rec.rtcOpen) return;
+        if (!rec.relayDc) ensureHostRelayOpen(rec);
+        rec.relayDc._deliver(msg.m);
+      } else if (msg.t === 'ice' && msg.cand) {
+        const rec = net.pendingDirectMap.get(msg.gid);
+        if (!rec) return;
+        if (rec.remoteSet) {
+          try { await rec.pc.addIceCandidate(msg.cand); } catch {}
+        } else {
+          rec.pendingRemoteCands.push(msg.cand);
+        }
+      } else if (msg.t === 'iceBatch' && Array.isArray(msg.cands)) {
+        const rec = net.pendingDirectMap.get(msg.gid);
+        if (!rec) return;
+        for (const c of msg.cands) {
+          if (rec.remoteSet) {
+            try { await rec.pc.addIceCandidate(c); } catch {}
+          } else {
+            rec.pendingRemoteCands.push(c);
+          }
+        }
+      }
+    });
+
+    net.statusMsg = `直连房间已开启！把「${addr}」发给好友即可接入（支持自动中继保底）`;
+    updateLanUI();
+    return addr;
+  }
+
+  async function joinDirectHostByAddress(hostAddr, opts = {}) {
+    if (net.ipv6.state === 'idle') probeIpv6Support();
+    if (net.ipv6Promise) {
+      await Promise.race([net.ipv6Promise, new Promise((r) => setTimeout(r, 2400))]);
+    }
+    const addr = String(hostAddr || (lanGuestHostAddr && lanGuestHostAddr.value) || '').trim();
+    if (!addr) throw new Error('请先粘贴房主的 IPv6 地址或房号');
+    if (net.directMqtt) { try { net.directMqtt.close(); } catch {} net.directMqtt = null; }
+    if (net.pendingGuestPc) { try { net.pendingGuestPc.close(); } catch {} net.pendingGuestPc = null; }
+
+    net.role = 'guest';
+    net.directRoomAddr = addr;
+    const myKnownV6 = isPublicIpv6(net.ipv6.publicIp) ? net.ipv6.publicIp : '';
+    const myGid = 'g_' + Math.random().toString(36).slice(2, 9);
+    const hash = hashDirectRoomKey(addr);
+    const reqTopic = 'patrol_p2p_v6/' + hash + '/req';
+    const resTopic = 'patrol_p2p_v6/' + hash + '/res/' + myGid;
+    let sigSeq = 1;
+
+    net.statusMsg = `正在连接「${addr}」寻找房主并交换 P2P 直连通道...`;
+    updateLanUI();
+
+    const mq = createMqttWssClient();
+    net.directMqtt = mq;
+    await mq.connect();
+
+    return await new Promise((resolve, reject) => {
+      let handledOffer = false;
+      let settled = false;
+      let nativeOpen = false;
+      let relayActive = false;
+      let findTimer = null;
+      let p2pTimer = null;
+      let relayFallbackTimer = null;
+      let relayReadyTimer = null;
+      let hiInterval = null;
+      let ansRetryTimer = null;
+      let pc = null;
+      let hostPeer = null;
+      let relayDc = null;
+      let remoteSet = false;
+      let hostAcked = false;
+      let ansTok = '';
+      const guestLocalCands = [];
+      const pendingHostCands = [];
+
+      const clearHandshakes = () => {
+        if (findTimer) { clearTimeout(findTimer); findTimer = null; }
+        if (p2pTimer) { clearTimeout(p2pTimer); p2pTimer = null; }
+        if (relayFallbackTimer) { clearTimeout(relayFallbackTimer); relayFallbackTimer = null; }
+        if (relayReadyTimer) { clearInterval(relayReadyTimer); relayReadyTimer = null; }
+        if (hiInterval) { clearInterval(hiInterval); hiInterval = null; }
+        if (ansRetryTimer) { clearInterval(ansRetryTimer); ansRetryTimer = null; }
+      };
+
+      const fail = (errMsg) => {
+        if (settled) return;
+        settled = true;
+        clearHandshakes();
+        mq.close();
+        if (net.directMqtt === mq) net.directMqtt = null;
+        reject(new Error(errMsg));
+      };
+
+      const activateGuestRelay = () => {
+        if (relayActive || nativeOpen || !hostPeer) return;
+        relayActive = true;
+        if (ansRetryTimer) { clearInterval(ansRetryTimer); ansRetryTimer = null; }
+        relayDc = createRelayDc((pktStr, fast) => {
+          mq.publish(reqTopic, JSON.stringify({ gid: myGid, t: 'd', p: sigSeq++, m: pktStr }), fast ? 0 : 1);
+        });
+        setupNetChannel(relayDc, hostPeer, false);
+        const origMsg = relayDc.onmessage;
+        relayDc.onmessage = (ev) => {
+          if (origMsg) origMsg(ev);
+          if (!settled && net.active) {
+            if (p2pTimer) { clearTimeout(p2pTimer); p2pTimer = null; }
+            if (relayReadyTimer && hostPeer._welcomed) {
+              clearInterval(relayReadyTimer);
+              relayReadyTimer = null;
+            }
+            settled = true;
+            resolve(true);
+          }
+        };
+        relayDc._open();
+        net.statusMsg = '直连穿透较慢，已自动启用加密中继保底通道...';
+        updateLanUI();
+
+        const sendRelayReady = () => {
+          if (nativeOpen || (hostPeer && hostPeer._welcomed)) {
+            clearInterval(relayReadyTimer);
+            relayReadyTimer = null;
+            return;
+          }
+          mq.publish(reqTopic, JSON.stringify({ gid: myGid, t: 'relayReady', callsign: net.callsign, seq: sigSeq++ }));
+        };
+        sendRelayReady();
+        relayReadyTimer = setInterval(sendRelayReady, 1800);
+      };
+
+      findTimer = setTimeout(() => {
+        if (!handledOffer) {
+          fail('未收到房主响应（请确认房主已点击“开启直连房间”且地址一致）');
+        }
+      }, 16000);
+
+      mq.subscribe(resTopic, async (payload) => {
+        let msg;
+        try { msg = JSON.parse(payload); } catch { return; }
+        if (msg.t === 'full') {
+          fail('房间人数已满（最多 6 人）');
+          return;
+        }
+        if (msg.t === 'ackA') {
+          hostAcked = true;
+          if (ansRetryTimer) { clearInterval(ansRetryTimer); ansRetryTimer = null; }
+          if (!settled && !relayActive) {
+            net.statusMsg = '房主已确认应答，正在打通 IPv6 / P2P（4秒不通自动中继）...';
+            updateLanUI();
+          }
+          return;
+        }
+        if (msg.t === 'd' && typeof msg.m === 'string') {
+          if (!nativeOpen && !relayActive && hostPeer) activateGuestRelay();
+          if (relayDc) relayDc._deliver(msg.m);
+          return;
+        }
+        if (msg.t === 'ice' && msg.cand) {
+          if (opts.simulateUdpBlocked) return;
+          if (pc && remoteSet) {
+            try { await pc.addIceCandidate(msg.cand); } catch {}
+          } else {
+            pendingHostCands.push(msg.cand);
+          }
+          return;
+        }
+        if (msg.t === 'iceBatch' && Array.isArray(msg.cands)) {
+          if (opts.simulateUdpBlocked) return;
+          for (const c of msg.cands) {
+            if (pc && remoteSet) {
+              try { await pc.addIceCandidate(c); } catch {}
+            } else {
+              pendingHostCands.push(c);
+            }
+          }
+          return;
+        }
+        if (msg.t === 'o' && msg.tok && !handledOffer) {
+          handledOffer = true;
+          if (findTimer) { clearTimeout(findTimer); findTimer = null; }
+          if (hiInterval) { clearInterval(hiInterval); hiInterval = null; }
+
+          p2pTimer = setTimeout(() => {
+            if (!settled) fail('连接房主超时，请确认双方网络正常后重试');
+          }, 24000);
+
+          try {
+            const data = await decodeSignalToken(msg.tok);
+            pc = createRtcPc();
+            net.pendingGuestPc = pc;
+            hostPeer = createPeerRecord('p1', data.name || 'HOST', 0, pc, null);
+
+            pc.onicecandidate = (ev) => {
+              if (!ev.candidate || opts.simulateUdpBlocked) return;
+              const expanded = expandCandidateWithPublicIpv6(ev.candidate.toJSON(), myKnownV6);
+              for (const c of expanded) {
+                guestLocalCands.push(c);
+                mq.publish(reqTopic, JSON.stringify({ gid: myGid, t: 'ice', cand: c, seq: sigSeq++ }));
+              }
+            };
+
+            pc.ondatachannel = (ev) => {
+              hostPeer.dc = ev.channel;
+              setupNetChannel(ev.channel, hostPeer, false);
+              const chainedOpen = ev.channel.onopen;
+              ev.channel.onopen = (e) => {
+                nativeOpen = true;
+                if (relayFallbackTimer) { clearTimeout(relayFallbackTimer); relayFallbackTimer = null; }
+                if (relayReadyTimer) { clearInterval(relayReadyTimer); relayReadyTimer = null; }
+                if (chainedOpen) chainedOpen(e);
+                if (relayDc && relayDc.readyState === 'open') {
+                  try { relayDc.close(); } catch {}
+                }
+                clearHandshakes();
+                setTimeout(() => {
+                  if (hostPeer && !hostPeer.usingRelay) {
+                    try { mq.close(); } catch {}
+                    if (net.directMqtt === mq) net.directMqtt = null;
+                  }
+                }, 800);
+                if (!settled) { settled = true; resolve(true); }
+              };
+            };
+
+            const offerSdp = opts.simulateUdpBlocked
+              ? data.sdp.replace(/^a=candidate:.*\r\n/gm, '')
+              : data.sdp;
+            await pc.setRemoteDescription({ type: 'offer', sdp: offerSdp });
+            remoteSet = true;
+            while (pendingHostCands.length > 0) {
+              const c = pendingHostCands.shift();
+              try { await pc.addIceCandidate(c); } catch {}
+            }
+
+            const answer = await pc.createAnswer();
+            await pc.setLocalDescription(answer);
+            const ansSdp = opts.simulateUdpBlocked
+              ? pc.localDescription.sdp.replace(/^a=candidate:.*\r\n/gm, '')
+              : pc.localDescription.sdp;
+            ansTok = await encodeSignalToken({ v: 1, t: 'a', sdp: ansSdp, name: net.callsign });
+            mq.publish(reqTopic, JSON.stringify({ gid: myGid, t: 'a', tok: ansTok, seq: sigSeq++ }));
+            if (guestLocalCands.length > 0) {
+              mq.publish(reqTopic, JSON.stringify({ gid: myGid, t: 'iceBatch', cands: guestLocalCands, seq: sigSeq++ }));
+            }
+
+            relayFallbackTimer = setTimeout(() => {
+              if (!nativeOpen && !relayActive) activateGuestRelay();
+            }, opts.fastRelayMs || 3800);
+
+            net.statusMsg = '已收到房主邀请，正在尝试 P2P 直连（3.8 秒自动切中继保底）...';
+            updateLanUI();
+
+            ansRetryTimer = setInterval(() => {
+              if (hostAcked || settled || relayActive) {
+                clearInterval(ansRetryTimer);
+                ansRetryTimer = null;
+                return;
+              }
+              mq.publish(reqTopic, JSON.stringify({ gid: myGid, t: 'a', tok: ansTok, seq: sigSeq++ }));
+              if (guestLocalCands.length > 0) {
+                mq.publish(reqTopic, JSON.stringify({ gid: myGid, t: 'iceBatch', cands: guestLocalCands, seq: sigSeq++ }));
+              }
+            }, 2200);
+          } catch (err) {
+            fail(err.message || '解析房主邀请失败');
+          }
+        }
+      }).then(() => {
+        const sendHi = () => mq.publish(reqTopic, JSON.stringify({ gid: myGid, t: 'hi', callsign: net.callsign, seq: sigSeq++ }));
+        sendHi();
+        hiInterval = setInterval(() => {
+          if (handledOffer || settled) {
+            clearInterval(hiInterval);
+            hiInterval = null;
+            return;
+          }
+          sendHi();
+        }, 2200);
+      });
+    });
+  }
+
   function disconnectNet() {
+    for (const p of net.peers.values()) {
+      sendRaw(p.dc, { t: 'bye', from: net.myId });
+    }
     for (const p of net.peers.values()) {
       try { if (p.dc) p.dc.close(); } catch {}
       try { if (p.pc) p.pc.close(); } catch {}
     }
+    if (net.directMqtt) { try { net.directMqtt.close(); } catch {} net.directMqtt = null; }
+    for (const entry of net.pendingDirectMap.values()) {
+      if (entry.resendTimer) clearInterval(entry.resendTimer);
+      if (entry.relayBackupTimer) clearTimeout(entry.relayBackupTimer);
+      try { if (entry.pc) entry.pc.close(); } catch {}
+    }
+    net.pendingDirectMap.clear();
     if (net.pendingHostPc) { try { net.pendingHostPc.close(); } catch {} net.pendingHostPc = null; }
     if (net.pendingGuestPc) { try { net.pendingGuestPc.close(); } catch {} net.pendingGuestPc = null; }
     net.peers.clear();
     net.active = false;
     net.role = 'none';
     net.hostConn = null;
+    net.directRoomAddr = '';
     net.nextGuestNum = 2;
     net.myId = 'p1';
     net.colorIdx = 0;
@@ -4043,8 +5126,16 @@
 
   function tickMultiplayer(dt) {
     if (!net.active) return;
+    const nowMs = performance.now();
+    for (const p of net.peers.values()) {
+      if (p.usingRelay && p.lastHeard && (nowMs - p.lastHeard > 14000)) {
+        if (p.dc && p.dc.readyState === 'open') p.dc.close();
+      }
+    }
     net.sendAcc += dt;
-    if (net.sendAcc >= 0.04) { // 25 Hz state sync
+    const anyRelay = Array.from(net.peers.values()).some((p) => p.usingRelay);
+    const stateStep = anyRelay ? 0.075 : 0.04; // 13.3 Hz over Relay, 25 Hz over P2P
+    if (net.sendAcc >= stateStep) {
       net.sendAcc = 0;
       const mySnap = serializeLocalState();
       if (net.role === 'host') {
@@ -4524,12 +5615,14 @@
     bot.burner = 0.0;
     bot.airbrake = 0.0;
     bot.throttle = 0.62;
-    bot.hp = MAX_HP;
+    const prof = getBotProfile();
+    bot.hp = prof.hp;
+    bot.maxHp = prof.hp;
     bot.hitFlash = 0.0;
     bot.jetEnergy = 1.0;
     bot.jetCooldown = 0.0;
     bot.jetIdleTimer = 0.0;
-    bot.ecmCharges = 1;
+    bot.ecmCharges = prof.ecmCharges;
     bot.ecmActiveTimer = 0.0;
     bot.ecmCooldown = 0.0;
     bot.gunAmmo = MAX_GUN_AMMO;
@@ -4540,7 +5633,7 @@
     bot.nextPylonIdx = 0;
     bot.lockTimer = 0.0;
     bot.lockedOnPlayer = false;
-    bot.missileFireCooldown = 4.2;
+    bot.missileFireCooldown = prof.initialMslCd;
     bot.pursuitElapsed = 0.0;
     bot.burstTimer = 0.0;
     bot.vaporLeft.length = 0;
@@ -4952,7 +6045,7 @@
     for (let k = 0; k < tracersPerRound; k++) {
       let dir;
       if (isBot || cam.mode === 0) {
-        const botSpreadMul = isBot ? 1.65 : 1.0;
+        const botSpreadMul = isBot ? getBotProfile().gunSpreadMul : 1.0;
         const sx = (Math.random() - 0.5) * box.w * 0.90 * botSpreadMul;
         const sy = (Math.random() - 0.5) * box.h * 0.55 * botSpreadMul;
         dir = v3Norm([
@@ -5170,7 +6263,7 @@
     }
     if (chosen < 0) return false;
     bot.pylons[chosen].reload = MISSILE_RELOAD_TIME;
-    bot.missileFireCooldown = 8.5;
+    bot.missileFireCooldown = getBotProfile().missileCd;
     const startPos = actorLocalToWorld(bot, bot.pylons[chosen].offset);
     const initSpeed = Math.max(bot.speed + 22, 162);
     const vel0 = [
@@ -5211,8 +6304,12 @@
     if (!bot.enabled) return;
     if (net.active && net.role === 'guest') return; // Host authoritatively drives AI Bot
 
+    const prof = getBotProfile();
+    bot.maxHp = prof.hp;
+    if (bot.hp > bot.maxHp) bot.hp = bot.maxHp;
+
     bot.hitFlash = Math.max(0, bot.hitFlash - dt * 5.0);
-    stepEcmState(bot, dt, 1, BOT_ECM_COOLDOWN);
+    stepEcmState(bot, dt, prof.ecmCharges, prof.ecmCd);
     bot.muzzleFlash = Math.max(0, bot.muzzleFlash - dt);
     bot.gunCooldown = Math.max(0, bot.gunCooldown - dt);
     bot.missileFireCooldown = Math.max(0, bot.missileFireCooldown - dt);
@@ -5229,7 +6326,7 @@
       return;
     }
 
-    // Check incoming missiles -> imperfect Bot ECM (38% chance per missile) or Evasive Roll!
+    // Check incoming missiles -> difficulty-scaled Bot ECM or High-G Evasive Roll!
     let closestMslDist = 1e9;
     let triggerMsl = null;
     for (const ms of activeMissiles) {
@@ -5238,21 +6335,22 @@
         if (md < closestMslDist) { closestMslDist = md; triggerMsl = ms; }
       }
     }
-    if (triggerMsl && closestMslDist < 240) {
+    const threatRange = prof.tier === 'LEGEND' ? 320 : prof.tier === 'VETERAN' ? 280 : 240;
+    if (triggerMsl && closestMslDist < threatRange) {
       if (!triggerMsl._botRolledEcm) {
         triggerMsl._botRolledEcm = true;
-        if (bot.ecmCooldown <= 0 && Math.random() < 0.38) {
+        if (bot.ecmCharges > 0 && Math.random() < prof.ecmChance) {
           triggerEcm(bot, false);
         }
       }
-      if (bot.ecmActiveTimer <= 0 && bot.rollTimer <= 0 && Math.random() < 0.65 * dt * 10) {
+      if (bot.ecmActiveTimer <= 0 && bot.rollTimer <= 0 && Math.random() < prof.barrelAvoidChance * dt * 10) {
         bot.rollTimer = bot.rollDuration;
         bot.rollDir = (bot.bank >= 0) ? 1 : -1;
         bot.rollPrevAngle = 0;
       }
     }
 
-    // Tactical Dogfight State Machine (fair flight passes instead of endless tight-orbit beaming!)
+    // Tactical Dogfight State Machine (scales from fair pass -> Vet intercept -> Legend BFM scissors!)
     const toP = [plane.pos[0] - bot.pos[0], plane.pos[1] - bot.pos[1], plane.pos[2] - bot.pos[2]];
     const dist = Math.hypot(toP[0], toP[1], toP[2]) || 1;
     const dirToP = [toP[0] / dist, toP[1] / dist, toP[2] / dist];
@@ -5264,42 +6362,45 @@
 
     bot.aiTimer = Math.max(0, bot.aiTimer - dt);
     if (bot.aiTimer <= 0) {
-      if (dist < 165 || bot.pursuitElapsed > 5.2) {
+      if (dist < (prof.tier === 'LEGEND' ? 120 : 165) || bot.pursuitElapsed > prof.pursuitCap) {
         bot.aiMode = 'EXTEND';
-        bot.aiTimer = 2.4;
+        bot.aiTimer = prof.tier === 'LEGEND' ? 1.55 : prof.tier === 'VETERAN' ? 1.9 : 2.4;
         bot.weaveSeed = (Math.random() < 0.5 ? -1 : 1) * (0.75 + Math.random() * 0.45);
-      } else if (dist < 320 && playerAimAtBot > 0.88 && alignDot < 0.25) {
+      } else if (dist < 360 && playerAimAtBot > 0.88 && alignDot < 0.30) {
         bot.aiMode = 'EVADE';
-        bot.aiTimer = 2.2;
+        bot.aiTimer = prof.tier === 'LEGEND' ? 1.85 : 2.2;
         bot.weaveSeed = (Math.random() < 0.5 ? -1 : 1) * (0.85 + Math.random() * 0.4);
       } else {
         bot.aiMode = 'PURSUIT';
-        bot.aiTimer = 0.75;
+        bot.aiTimer = prof.tier === 'LEGEND' ? 0.42 : 0.75;
       }
     }
 
     let aimPoint;
     if (bot.aiMode === 'EXTEND') {
+      const climbBoost = prof.tier === 'LEGEND' ? 95 : 55;
       aimPoint = [
         bot.pos[0] - dirToP[0] * 180 + bot.right[0] * bot.weaveSeed * 260,
-        Math.max(bot.pos[1] + 55, CRUISE_ALT_Y + 40),
+        clamp(Math.max(bot.pos[1] + climbBoost, CRUISE_ALT_Y + 40), 140, 560),
         bot.pos[2] - dirToP[2] * 180 + bot.right[2] * bot.weaveSeed * 260
       ];
     } else if (bot.aiMode === 'EVADE') {
       const lat = v3Norm(v3Cross(dirToP, [0, 1, 0]));
+      const jinkFreq = prof.tier === 'LEGEND' ? 3.4 : 2.1;
+      const jinkAmp = prof.tier === 'LEGEND' ? 125 : 85;
       aimPoint = [
-        bot.pos[0] + lat[0] * bot.weaveSeed * 320 + bot.fwd[0] * 180,
-        clamp(bot.pos[1] + Math.sin(simTime * 2.1 + bot.weaveSeed) * 85, 130, 460),
-        bot.pos[2] + lat[2] * bot.weaveSeed * 320 + bot.fwd[2] * 180
+        bot.pos[0] + lat[0] * bot.weaveSeed * 320 + bot.fwd[0] * 165,
+        clamp(bot.pos[1] + Math.sin(simTime * jinkFreq + bot.weaveSeed) * jinkAmp, 125, 510),
+        bot.pos[2] + lat[2] * bot.weaveSeed * 320 + bot.fwd[2] * 165
       ];
     } else {
-      const leadT = clamp(dist / 680, 0.06, 0.65);
-      const wanderX = Math.sin(simTime * 1.15 + bot.weaveSeed) * 16;
-      const wanderY = Math.cos(simTime * 0.95 + bot.weaveSeed) * 12;
+      const leadT = clamp(dist / (680 / prof.leadSpeedScale), 0.04, 0.72);
+      const wanderX = Math.sin(simTime * 1.15 + bot.weaveSeed) * 16 * prof.wanderAmt;
+      const wanderY = Math.cos(simTime * 0.95 + bot.weaveSeed) * 12 * prof.wanderAmt;
       aimPoint = [
-        plane.pos[0] + plane.fwd[0] * plane.speed * leadT + wanderX,
-        clamp(plane.pos[1] + plane.fwd[1] * plane.speed * leadT + wanderY, 95, 520),
-        plane.pos[2] + plane.fwd[2] * plane.speed * leadT
+        plane.pos[0] + plane.fwd[0] * plane.speed * leadT * prof.leadSpeedScale + wanderX,
+        clamp(plane.pos[1] + plane.fwd[1] * plane.speed * leadT * prof.leadSpeedScale + wanderY, 92, 540),
+        plane.pos[2] + plane.fwd[2] * plane.speed * leadT * prof.leadSpeedScale
       ];
     }
 
@@ -5310,20 +6411,25 @@
 
     let rollCmd = 0;
     const offAxis = Math.hypot(lx, ly);
-    if (lz < 0.94 && offAxis > 0.06) {
-      rollCmd = clamp(Math.atan2(lx, Math.max(0.08, ly)) * 1.3, -1, 1);
+    if (lz < 0.96 && offAxis > 0.045) {
+      rollCmd = clamp(Math.atan2(lx, Math.max(0.08, ly)) * (prof.tier === 'LEGEND' ? 1.65 : 1.3), -1, 1);
     } else {
       rollCmd = clamp(-bot.bank * 0.65, -0.5, 0.5);
     }
-    const pitchCmd = clamp((lz > 0 ? ly * 1.9 : 0.85), -0.82, 0.95);
-    const yawCmd = clamp(lx * 0.72, -0.65, 0.65);
+    const pitchCmd = clamp((lz > 0 ? ly * (prof.tier === 'LEGEND' ? 2.35 : 1.9) : 0.95), -0.88, 0.98);
+    const yawCmd = clamp(lx * (prof.tier === 'LEGEND' ? 0.92 : 0.72), -0.78, 0.78);
 
-    const maxPitchRate = 1.05;
-    const maxRollRate  = 1.65;
-    const maxYawRate   = 0.55;
-    bot.pitchVel = lerp(bot.pitchVel, pitchCmd * maxPitchRate, 1 - Math.exp(-dt * 6.5));
-    bot.rollVel  = lerp(bot.rollVel,  rollCmd  * maxRollRate,  1 - Math.exp(-dt * 7.5));
-    bot.yawVel   = lerp(bot.yawVel,   yawCmd   * maxYawRate,   1 - Math.exp(-dt * 6.5));
+    const botBrakeCond = prof.canZeroBrake && (
+      (dist < 240 && bot.aiMode === 'PURSUIT' && alignDot > 0.72 && bot.speed > plane.speed + 12) ||
+      (prof.tier === 'LEGEND' && lz < 0.35 && dist < 440)
+    );
+    const botAgility = 1.0 + (botBrakeCond ? 0.28 : 0.0);
+    const maxPitchRate = prof.pitchRate * botAgility;
+    const maxRollRate  = prof.rollRate;
+    const maxYawRate   = prof.yawRate * botAgility;
+    bot.pitchVel = lerp(bot.pitchVel, pitchCmd * maxPitchRate, 1 - Math.exp(-dt * 7.5));
+    bot.rollVel  = lerp(bot.rollVel,  rollCmd  * maxRollRate,  1 - Math.exp(-dt * 8.5));
+    bot.yawVel   = lerp(bot.yawVel,   yawCmd   * maxYawRate,   1 - Math.exp(-dt * 7.5));
 
     let barrelRollDelta = 0;
     if (bot.rollTimer > 0) {
@@ -5342,7 +6448,7 @@
     computeActorBasis(bot);
 
     const uprightFactor = clamp(bot.up[1], -1, 1);
-    const bankTurnRate = Math.sin(bot.bank) * Math.max(0, uprightFactor) * 0.48 * (1.0 + bot.burner * 0.12);
+    const bankTurnRate = Math.sin(bot.bank) * Math.max(0, uprightFactor) * prof.bankTurn * (1.0 + bot.burner * 0.14 + (botBrakeCond ? 0.20 : 0));
     if (Math.abs(bankTurnRate) > 0.001) {
       bot.quat = quatNorm(quatMul(quatFromAxisAngle(0, 1, 0, -bankTurnRate * dt), bot.quat));
       computeActorBasis(bot);
@@ -5350,14 +6456,21 @@
 
     stepTerrainAvoidance(bot, dt);
 
-    const wantJet = (dist > 640 && bot.jetEnergy > 0.30) || (bot.aiMode === 'EVADE' && bot.jetEnergy > 0.35) || (closestMslDist < 280 && bot.jetEnergy > 0.25) ? 1 : 0;
-    const wantBrake = (dist < 220 && bot.aiMode === 'PURSUIT' && alignDot > 0.85) ? 0.65 : 0;
+    const wantJet = (
+      (dist > (prof.tier === 'LEGEND' ? 480 : 640) && bot.jetEnergy > 0.28) ||
+      (bot.aiMode === 'EVADE' && bot.jetEnergy > 0.25) ||
+      (closestMslDist < 310 && bot.jetEnergy > 0.22)
+    ) ? 1 : 0;
+    const wantBrake = botBrakeCond ? (prof.canZeroBrake ? 0.95 : 0.65) : 0;
     stepJetBoost(bot, wantJet, dt, false);
-    bot.airbrake = lerp(bot.airbrake, wantBrake, 1 - Math.exp(-dt * 6.0));
-    bot.throttle = lerp(bot.throttle, clamp(0.60 + bot.burner * 0.36 - wantBrake * 0.40, 0.18, 0.96), 1 - Math.exp(-dt * 5.0));
+    bot.airbrake = lerp(bot.airbrake, wantBrake, 1 - Math.exp(-dt * 7.5));
+    const botTargetThr = wantBrake > 0.2 && prof.canZeroBrake
+      ? 0.0
+      : clamp(0.60 + bot.burner * 0.38 - wantBrake * 0.42, 0.18, 0.98);
+    bot.throttle = lerp(bot.throttle, botTargetThr, 1 - Math.exp(-dt * 7.5));
 
-    const targetSpeed = 140.0 + bot.burner * 96.0 - bot.airbrake * 50.0 - bot.fwd[1] * 40.0;
-    bot.speed = lerp(bot.speed, clamp(targetSpeed, 88, 246), 1 - Math.exp(-dt * 2.6));
+    const targetSpeed = (prof.canZeroBrake ? (64.0 + bot.throttle * 145.0) : prof.baseSpeed) + bot.burner * prof.jetAdd - bot.airbrake * 28.0 - bot.fwd[1] * 40.0;
+    bot.speed = lerp(bot.speed, clamp(targetSpeed, prof.minSpeed, prof.maxSpeed), 1 - Math.exp(-dt * 3.0));
 
     bot.pos[0] += bot.fwd[0] * bot.speed * dt;
     bot.pos[1] += bot.fwd[1] * bot.speed * dt;
@@ -5386,23 +6499,23 @@
       while (arr.length > 42) arr.shift();
     }
 
-    // Strict Visibility Check: Bot MUST have Player inside its +/-22 deg forward cone AND clear terrain Line-of-Sight!
-    const playerInCone = alignDot >= BOT_FOV_COS;
-    const clearSight = playerInCone && dist <= 860 && hasLineOfSight(bot.pos, plane.pos);
+    // Strict Visibility Check: ALL Bot tiers MUST have Player inside forward radar cone AND clear terrain Line-of-Sight!
+    const playerInCone = alignDot >= prof.fovCos;
+    const clearSight = playerInCone && dist <= 900 && hasLineOfSight(bot.pos, plane.pos);
 
-    // Bot Nose Cannon (short controlled bursts when strictly in tight +/-12 deg forward sight + LOS!)
-    bot.burstTimer = (bot.burstTimer + dt) % 1.65;
+    // Bot Nose Cannon (controlled bursts inside cone + clear LOS)
+    bot.burstTimer = (bot.burstTimer + dt) % prof.burstPeriod;
     if (bot.gunReloadTimer > 0) {
       bot.gunReloadTimer = Math.max(0, bot.gunReloadTimer - dt);
       if (bot.gunReloadTimer === 0) bot.gunAmmo = MAX_GUN_AMMO;
-    } else if (dist < 460 && alignDot > 0.978 && clearSight && bot.burstTimer < 0.50 && plane.invulnTimer <= 0 && bot.gunCooldown <= 0) {
+    } else if (dist < prof.gunRange && alignDot > prof.gunConeCos && clearSight && bot.burstTimer < prof.burstLen && plane.invulnTimer <= 0 && bot.gunCooldown <= 0) {
       if (fireGunRound('bot')) bot.gunCooldown = GUN_FIRE_INTERVAL;
     }
 
-    // Bot Missile Lock & Launch (STRICT +/-22 deg FOV cone + mountain LOS occlusion + 2.2s lock-on!)
-    if (dist >= 160 && dist <= 820 && clearSight && plane.ecmActiveTimer <= 0 && plane.invulnTimer <= 0) {
-      bot.lockTimer = Math.min(2.6, bot.lockTimer + dt);
-      bot.lockedOnPlayer = bot.lockTimer >= BOT_LOCK_REQUIRED;
+    // Bot Missile Lock & Launch (STRICT forward FOV cone + mountain LOS occlusion + difficulty lock-on time)
+    if (dist >= 150 && dist <= 880 && clearSight && plane.ecmActiveTimer <= 0 && plane.invulnTimer <= 0) {
+      bot.lockTimer = Math.min(prof.lockRequired + 0.4, bot.lockTimer + dt);
+      bot.lockedOnPlayer = bot.lockTimer >= prof.lockRequired;
       if (bot.lockedOnPlayer && bot.missileFireCooldown <= 0) {
         fireBotMissile(false);
       }
@@ -5714,13 +6827,15 @@
     const steerModeBurn = (settings.mouseMode === 'STEER') && input.lmbDown && (input.lmbHoldTime > 0.16);
     const gunActive = (settings.mouseMode === 'LOCK' && input.lmbDown) || keyGun || input.gpGun || input.touchGun;
 
-    // Throttle, Jet Boost Energy/CD & Airbrake
+    // Throttle, Jet Boost Energy/CD & Zero-Power Airbrake
     const rawBurn = clamp(Math.max(keyBurn, input.gpBurn, input.touchBurn ? 1 : 0, steerModeBurn ? 1 : 0), 0, 1);
     const rawBrake = clamp(Math.max(keyBrake, input.gpBrake, input.touchBrake ? 1 : 0), 0, 1);
     stepJetBoost(plane, rawBurn, dt, true);
-    plane.airbrake = lerp(plane.airbrake, rawBrake, 1 - Math.exp(-dt * 6.5));
-    const targetThrottle = clamp(0.62 + plane.burner * 0.38 - rawBrake * 0.42, 0.18, 1.0);
-    plane.throttle = lerp(plane.throttle, targetThrottle, 1 - Math.exp(-dt * 5.0));
+    plane.airbrake = lerp(plane.airbrake, rawBrake, 1 - Math.exp(-dt * 8.0));
+    const targetThrottle = rawBrake > 0.12
+      ? clamp((0.62 + plane.burner * 0.38) * Math.max(0, 1 - rawBrake), 0.0, 1.0)
+      : clamp(0.62 + plane.burner * 0.38, 0.0, 1.0);
+    plane.throttle = lerp(plane.throttle, targetThrottle, 1 - Math.exp(-dt * (rawBrake > 0.12 ? 9.5 : 5.5)));
 
     plane.damageFlash = Math.max(0, plane.damageFlash - dt * 3.0);
     plane.invulnTimer = Math.max(0, plane.invulnTimer - dt);
@@ -5778,10 +6893,11 @@
       yawCmd = clamp(desiredBank * 0.45, -0.5, 0.5);
     }
 
-    // 3. Body-frame Angular Rates (Real Fighter Jet Pitch, Roll, Yaw!)
-    const maxPitchRate = 1.65 * settings.pitchSens;
-    const maxRollRate  = 2.65 * settings.rollSens;
-    const maxYawRate   = 0.92;
+    // 3. Body-frame Angular Rates (Real Fighter Jet Pitch, Roll, Yaw + High-Alpha Brake Agility!)
+    const brakeAgility = 1.0 + plane.airbrake * 0.32;
+    const maxPitchRate = 1.65 * settings.pitchSens * brakeAgility;
+    const maxRollRate  = 2.65 * settings.rollSens * (1.0 + plane.airbrake * 0.18);
+    const maxYawRate   = 0.92 * brakeAgility;
 
     const prevPitchVel = plane.pitchVel;
     const prevRollVel  = plane.rollVel;
@@ -5809,7 +6925,7 @@
     // Subtle realistic aerodynamic coordinated bank turn (banking naturally curves heading gently even without hard pitch!)
     computePlaneBasis();
     const uprightFactor = clamp(plane.up[1], -1, 1);
-    const bankTurnRate = Math.sin(plane.bank) * Math.max(0, uprightFactor) * 0.58 * (1.0 + plane.burner * 0.15);
+    const bankTurnRate = Math.sin(plane.bank) * Math.max(0, uprightFactor) * 0.58 * (1.0 + plane.burner * 0.15 + plane.airbrake * 0.24);
     if (Math.abs(bankTurnRate) > 0.001) {
       const dqBankTurn = quatFromAxisAngle(0, 1, 0, -bankTurnRate * dt);
       plane.quat = quatNorm(quatMul(dqBankTurn, plane.quat));
@@ -5827,9 +6943,10 @@
     // 4. Automatic Terrain Avoidance & Soft Ceiling (shared with Bot!)
     const isOverWater = stepTerrainAvoidance(plane, dt);
 
-    // 5. Airspeed & Energy (Jet Boost, Airbrake, gravity in climb/dive!)
-    const targetSpeed = 148.0 + plane.burner * 120.0 - plane.airbrake * 54.0 - plane.fwd[1] * 42.0;
-    plane.speed = lerp(plane.speed, clamp(targetSpeed, 88, 290), 1 - Math.exp(-dt * 2.6));
+    // 5. Airspeed & Energy (Zero-power airbrake drops smoothly down to agile 52 m/s!)
+    const thrustSpeed = 62.0 + plane.throttle * 138.0 + plane.burner * 70.0;
+    const targetSpeed = thrustSpeed - plane.airbrake * 18.0 - plane.fwd[1] * 38.0;
+    plane.speed = lerp(plane.speed, clamp(targetSpeed, 52, 290), 1 - Math.exp(-dt * (plane.airbrake > 0.2 ? 3.4 : 2.6)));
 
     // Advance position
     const prevY = plane.pos[1];
@@ -5972,7 +7089,7 @@
           const cy = b.prevPos[1] + segY * tProj;
           const cz = b.prevPos[2] + segZ * tProj;
           if (Math.hypot(cx - plane.pos[0], cy - plane.pos[1], cz - plane.pos[2]) <= 10.5) {
-            damagePlayer(b.owner === 'bot' ? 0.75 : 2.2, [cx, cy, cz], b.owner === 'bot' ? null : b.owner);
+            damagePlayer(b.owner === 'bot' ? getBotProfile().gunBulletDmg : 2.2, [cx, cy, cz], b.owner === 'bot' ? null : b.owner);
             hit = true;
           }
         }
@@ -6133,7 +7250,7 @@
 
       const isMyOwn = ms.owner === 'player' || (net.active && ms.owner === net.myId);
       if (!ms.jammed && (ms.owner === 'bot' || net.peers.has(ms.owner)) && plane.invulnTimer <= 0 && plane.ecmActiveTimer <= 0 && segDist(plane.pos) <= 15.0) {
-        damagePlayer(ms.owner === 'bot' ? 36 : 48, plane.pos, ms.owner === 'bot' ? null : ms.owner);
+        damagePlayer(ms.owner === 'bot' ? getBotProfile().missileDmg : 48, plane.pos, ms.owner === 'bot' ? null : ms.owner);
         spawnAirExplosion(ms.pos);
         hitAir = true;
       } else if (!ms.jammed && isMyOwn && bot.enabled && bot.alive && bot.ecmActiveTimer <= 0 && segDist(bot.pos) <= bot.radius + 11.0) {
@@ -6360,10 +7477,12 @@
     const flicker = 0.88 + 0.14 * Math.sin(simTime * 67) + 0.08 * Math.cos(simTime * 113);
 
     function emitActorPlumes(actor) {
-      const outerLen = (2.1 + actor.burner * 8.4) * flicker;
-      const outerRad = 0.46 + actor.burner * 0.24;
-      const coreLen  = (1.1 + actor.burner * 5.0) * flicker;
-      const coreRad  = 0.23 + actor.burner * 0.14;
+      const thrFactor = actor.burner > 0.05 ? 1.0 : clamp((actor.throttle !== undefined ? actor.throttle : 0.62) / 0.62, 0.0, 1.0);
+      if (thrFactor < 0.06) return;
+      const outerLen = (2.1 * thrFactor + actor.burner * 8.4) * flicker;
+      const outerRad = (0.46 * (0.45 + 0.55 * thrFactor)) + actor.burner * 0.24;
+      const coreLen  = (1.1 * thrFactor + actor.burner * 5.0) * flicker;
+      const coreRad  = (0.23 * (0.45 + 0.55 * thrFactor)) + actor.burner * 0.14;
       for (const side of [-1, 1]) {
         const cx = side * 1.12;
         const baseZ = 7.62;
@@ -6937,7 +8056,7 @@
       const onScreen = sp && sp.x >= minX && sp.x <= maxX && sp.y >= minY && sp.y <= maxY;
       const accentCol = opp.isPeer ? PEER_LIVERIES[opp.colorIdx % PEER_LIVERIES.length].badge : '#ffd026';
       const coreCol = opp.isPeer ? accentCol : '#ff3246';
-      const tagName = opp.isPeer ? opp.callsign.slice(0, 5) : 'BOT';
+      const tagName = opp.isPeer ? opp.callsign.slice(0, 5) : getBotProfile().tag;
 
       if (onScreen) {
         const tx = Math.round(sp.x), ty = Math.round(sp.y);
@@ -7130,7 +8249,7 @@
 
       if (dist < closestContactDist) {
         closestContactDist = dist;
-        const prefix = ct.isPeer ? ct.callsign.slice(0, 4) : 'BOT';
+        const prefix = ct.isPeer ? ct.callsign.slice(0, 4) : getBotProfile().tag;
         radarLabel = prefix + ' ' + Math.round(dist) + 'M';
         radarLabelCol = dist <= rangeM ? '#ffd026' : '#ff5e6c';
       }
@@ -7216,7 +8335,7 @@
             pxRect(hudCtx, bx - r, by + r, 4, 1, col); pxRect(hudCtx, bx - r, by + r - 3, 1, 4, col);
             pxRect(hudCtx, bx + r - 3, by + r, 4, 1, col); pxRect(hudCtx, bx + r, by + r - 3, 1, 4, col);
             drawHudBar(bx - 10, by - r - 6, 20, 4, opp.hp / opp.maxHp, col, '#141b30', '#ffd026');
-            const tag = opp.isPeer ? opp.callsign.slice(0, 6) : 'BOT';
+            const tag = opp.isPeer ? opp.callsign.slice(0, 6) : getBotProfile().tag;
             const bLbl = (opp.ecmActiveTimer > 0 ? 'ECM ' : (tag + ' ')) + Math.round(bDist) + 'M';
             const lw = Math.max(37, bLbl.length * 4 + 5);
             pxRect(hudCtx, bx - Math.round(lw * 0.5), by + r + 2, lw, 7, 'rgba(20, 27, 48, 0.78)');
@@ -7438,7 +8557,7 @@
           const hpCol = tgtObj.isPeer ? PEER_LIVERIES[tgtObj.colorIdx % PEER_LIVERIES.length].badge : (tgtObj.isBot ? '#ff4252' : '#ffd026');
           drawHudBar(ax - 9, ay - r - 6, 18, 4, tgtObj.hp / tgtObj.maxHp, hpCol, '#141b30', '#ffd026');
         }
-        const prefix = hasAirTarget ? (tgtObj.isPeer ? (tgtObj.callsign.slice(0, 5) + ' ') : (tgtObj.isBot ? 'BOT ' : 'TGT ')) : 'LOCK ';
+        const prefix = hasAirTarget ? (tgtObj.isPeer ? (tgtObj.callsign.slice(0, 5) + ' ') : (tgtObj.isBot ? (getBotProfile().tag + ' ') : 'TGT ')) : 'LOCK ';
         const distLbl = prefix + Math.round(aim.dist) + 'M';
         const lw = Math.max(41, distLbl.length * 4 + 6);
         pxRect(hudCtx, ax - Math.round(lw * 0.5), ay + r + 3, lw, 7, 'rgba(20, 27, 48, 0.78)');
@@ -7787,7 +8906,7 @@
     pxText(hudCtx, 'AB', thrX + 1, thrTop - 11, plane.burner > 0.2 ? C_AMBER : '#7c6391', 'center');
     pxText(hudCtx, 'THR', thrX + 1, thrTop + thrH + 8, '#8a7c94', 'center');
     // Moving throttle handle
-    const thrNorm = clamp((plane.throttle - 0.5) / 0.5, 0, 1); // 0.24 cruise -> 1.0 full AB
+    const thrNorm = clamp(plane.throttle, 0, 1); // 0.00 zero-power cut -> 0.62 cruise -> 1.00 full jet boost
     const handleY = Math.round(thrTop + thrH - 8 - thrNorm * (thrH - 16));
     pxRect(hudCtx, thrX - 9, handleY - 4, 19, 9, C_BEZEL);
     pxRect(hudCtx, thrX - 8, handleY - 3, 17, 7, C_METAL_LT);
@@ -7802,8 +8921,9 @@
     pxRect(hudCtx, engX - 17, engY - 3, 36, engH + 20, C_FACE);
     pxText(hudCtx, 'ENG', engX + 1, engY - 1, '#b6c0cf', 'center');
 
-    const rpmVal = clamp(0.72 + plane.burner * 0.26 + Math.sin(simTime * 19) * 0.01, 0, 1);
-    const egtVal = clamp(0.55 + plane.burner * 0.41 + Math.cos(simTime * 13) * 0.015, 0, 1);
+    const thrIdle = clamp(plane.throttle / 0.62, 0, 1);
+    const rpmVal = clamp(thrIdle * 0.72 + plane.burner * 0.26 + Math.sin(simTime * 19) * 0.01 * thrIdle, 0, 1);
+    const egtVal = clamp(thrIdle * 0.55 + plane.burner * 0.41 + Math.cos(simTime * 13) * 0.015 * thrIdle, 0, 1);
     const bars = [
       { x: engX - 14, v: rpmVal, lbl: 'L', col: rpmVal > 0.9 ? C_ORANGE : '#7cff8a' },
       { x: engX - 6,  v: rpmVal * 0.99, lbl: 'R', col: rpmVal > 0.9 ? C_ORANGE : '#7cff8a' },
@@ -7814,8 +8934,8 @@
     const barMaxH = engH - 6;
     for (const b of bars) {
       pxRect(hudCtx, b.x, engY + 7, 5, barMaxH, '#0f0d18');
-      const fillH = Math.max(2, Math.round(b.v * barMaxH));
-      pxRect(hudCtx, b.x + 1, barBase - fillH, 3, fillH, b.col);
+      const fillH = Math.round(b.v * barMaxH);
+      if (fillH > 0) pxRect(hudCtx, b.x + 1, barBase - fillH, 3, fillH, b.col);
       pxText(hudCtx, b.lbl, b.x + 2, barBase + 3, '#7e899c', 'center');
     }
     pxText(hudCtx, 'RPM EGT', engX + 1, barBase + 10, '#7c6391', 'center');
@@ -8083,6 +9203,15 @@
   const lanOverlay = document.getElementById('lanOverlay');
   const lanRoleBadge = document.getElementById('lanRoleBadge');
   const lanNameInput = document.getElementById('lanNameInput');
+  const lanIpv6Pill = document.getElementById('lanIpv6Pill');
+  const lanMyIpv6Text = document.getElementById('lanMyIpv6Text');
+  const btnCopyIpv6 = document.getElementById('btnCopyIpv6');
+  const btnRecheckIpv6 = document.getElementById('btnRecheckIpv6');
+  const lanHostAddrInput = document.getElementById('lanHostAddrInput');
+  const btnStartDirectHost = document.getElementById('btnStartDirectHost');
+  const btnCopyDirectHost = document.getElementById('btnCopyDirectHost');
+  const lanGuestHostAddr = document.getElementById('lanGuestHostAddr');
+  const btnJoinDirectHost = document.getElementById('btnJoinDirectHost');
   const btnLanTargets = document.getElementById('btnLanTargets');
   const btnLanBot = document.getElementById('btnLanBot');
   const btnHostCreate = document.getElementById('btnHostCreate');
@@ -8146,6 +9275,7 @@
   const optDeadzone     = document.getElementById('optDeadzone');
   const valDeadzone     = document.getElementById('valDeadzone');
   const optRumble       = document.getElementById('optRumble');
+  const optBotDiff      = document.getElementById('optBotDiff');
   const btnResetSettings = document.getElementById('btnResetSettings');
   const btnCloseSettings = document.getElementById('btnCloseSettings');
 
@@ -8210,6 +9340,15 @@
       step: () => {
         settings.rumble = !settings.rumble;
         if (settings.rumble) rumblePad(110, 0.4, 0.35);
+      }
+    },
+    {
+      id: 'optBotDiff', type: 'cycle', el: optBotDiff, row: optBotDiff.closest('.set-row'),
+      step: (dir) => {
+        const seq = ['NORMAL', 'VETERAN', 'LEGEND'];
+        const d = dir < 0 ? -1 : 1;
+        settings.botDiff = seq[(seq.indexOf(settings.botDiff) + d + seq.length) % seq.length];
+        applyBotDifficultyChange();
       }
     },
     {
@@ -8340,7 +9479,16 @@
     optDeadzone.value           = String(settings.deadzone);
     valDeadzone.textContent     = settings.deadzone.toFixed(2);
     optRumble.textContent       = settings.rumble ? t('on') : t('off');
+    if (optBotDiff) optBotDiff.textContent = t('bd' + (settings.botDiff || 'NORMAL'));
     updateInputHints();
+  }
+
+  function applyBotDifficultyChange() {
+    const prof = getBotProfile();
+    bot.maxHp = prof.hp;
+    if (bot.enabled && bot.alive) bot.hp = Math.min(prof.hp, bot.hp + 30);
+    if (bot.enabled) bot.ecmCharges = Math.min(prof.ecmCharges, Math.max(bot.ecmCharges, 1));
+    showFsToast(t('lblBotDiff') + ': ' + t('bd' + prof.tier));
   }
 
   function toggleSettings(force) {
@@ -8403,6 +9551,14 @@
     saveSettings(); syncSettingsUI();
     if (settings.rumble) rumblePad(110, 0.4, 0.35);
   });
+  if (optBotDiff) {
+    optBotDiff.addEventListener('click', () => {
+      const seq = ['NORMAL', 'VETERAN', 'LEGEND'];
+      settings.botDiff = seq[(seq.indexOf(settings.botDiff) + 1) % seq.length];
+      applyBotDifficultyChange();
+      saveSettings(); syncSettingsUI();
+    });
+  }
 
   window.addEventListener('gamepadconnected', (e) => {
     input.gpConnected = true;
@@ -8582,7 +9738,8 @@
       });
     }
     if (bot.enabled) {
-      rows.push({ id: 'bot', name: 'BOT-ACE', hp: bot.alive ? Math.ceil(bot.hp) : 0, k: botKills, d: playerBotKills, me: false, col: '#ff4252' });
+      const bp = getBotProfile();
+      rows.push({ id: 'bot', name: bp.tag + '-' + bp.tier.slice(0, 3), hp: bot.alive ? Math.ceil(bot.hp) : 0, k: botKills, d: playerBotKills, me: false, col: '#ff4252' });
     }
     rows.sort((a, b) => (b.k - a.k) || (a.d - b.d));
     const roleTxt = net.role === 'host' ? 'HOST' : 'PILOT';
@@ -8605,13 +9762,35 @@
       btnLanBot.textContent = 'AI 敌机: ' + (bot.enabled ? '开启' : '关闭');
       btnLanBot.disabled = (net.active && net.role === 'guest');
     }
+    if (lanIpv6Pill && lanMyIpv6Text) {
+      lanIpv6Pill.className = 'lan-ipv6-pill';
+      if (net.ipv6.state === 'public') {
+        lanIpv6Pill.classList.add('ok');
+        lanIpv6Pill.textContent = '🟢 支持公网 IPv6 直连';
+        lanMyIpv6Text.textContent = net.ipv6.publicIp;
+      } else if (net.ipv6.state === 'local') {
+        lanIpv6Pill.classList.add('warn');
+        lanIpv6Pill.textContent = '🟡 仅本地 IPv6 (已备用房号)';
+        lanMyIpv6Text.textContent = net.directRoomAddr || net.directFallbackCode;
+      } else if (net.ipv6.state === 'none') {
+        lanIpv6Pill.classList.add('no');
+        lanIpv6Pill.textContent = '🔴 无公网 IPv6 (用房号直连)';
+        lanMyIpv6Text.textContent = net.directRoomAddr || net.directFallbackCode;
+      } else if (net.ipv6.state === 'probing') {
+        lanIpv6Pill.textContent = '正在检测 IPv6 网络环境...';
+        lanMyIpv6Text.textContent = '检测中...';
+      }
+    }
     if (lanStatusText && net.statusMsg) lanStatusText.textContent = net.statusMsg;
     if (lanPeerList) {
-      const list = [`• ${net.callsign} (本机 · ${net.role === 'guest' ? '客机' : (net.role === 'host' ? '房主' : '离线')})`];
+      const list = [`<div>• ${net.callsign} (本机 · ${net.role === 'guest' ? '客机' : (net.role === 'host' ? '房主' : '离线')})</div>`];
       for (const peer of net.peers.values()) {
-        list.push(`• ${peer.callsign} (${peer.id.toUpperCase()} · HP ${Math.ceil(peer.hp)} · 击落 ${peer.kills})`);
+        const cls = peer.proto === 'IPv4' ? ' v4' : (peer.proto === 'RELAY' ? ' relay' : '');
+        const label = peer.proto === 'RELAY' ? '中继保底' : peer.proto;
+        const protoHtml = peer.proto ? `<span class="lan-proto-tag${cls}">${label}</span>` : '';
+        list.push(`<div>• ${peer.callsign} (${peer.id.toUpperCase()} · HP ${Math.ceil(peer.hp)} · 击落 ${peer.kills})${protoHtml}</div>`);
       }
-      lanPeerList.innerHTML = list.join('<br>');
+      lanPeerList.innerHTML = list.join('');
     }
   }
 
@@ -8621,6 +9800,7 @@
     if (lanOverlay) lanOverlay.classList.toggle('open', lanOpen);
     if (lanOpen) {
       input.lmbDown = false; input.rmbDown = false; input.touchGun = false;
+      if (net.ipv6.state === 'idle') probeIpv6Support();
       updateLanUI();
     }
   }
@@ -8769,6 +9949,42 @@
     });
   }
   if (btnLanBot) btnLanBot.addEventListener('click', () => toggleBot());
+  if (btnRecheckIpv6) btnRecheckIpv6.addEventListener('click', () => probeIpv6Support());
+  async function copyDirectText(txt, toast) {
+    if (!txt) return;
+    try { await navigator.clipboard.writeText(txt); showFsToast(toast); } catch { showFsToast(txt); }
+  }
+  if (btnCopyIpv6) {
+    btnCopyIpv6.addEventListener('click', () => {
+      const addr = (lanHostAddrInput && lanHostAddrInput.value.trim()) || net.ipv6.publicIp || net.directFallbackCode;
+      copyDirectText(addr, '已复制地址: ' + addr);
+    });
+  }
+  if (btnCopyDirectHost) {
+    btnCopyDirectHost.addEventListener('click', () => {
+      const addr = (lanHostAddrInput && lanHostAddrInput.value.trim()) || net.directRoomAddr || net.ipv6.publicIp || net.directFallbackCode;
+      copyDirectText(addr, '已复制房主地址: ' + addr);
+    });
+  }
+  if (btnStartDirectHost) {
+    btnStartDirectHost.addEventListener('click', async () => {
+      try {
+        const addr = await startDirectHostRoom();
+        copyDirectText(addr, '房间已开，已自动复制: ' + addr);
+      } catch (err) {
+        if (lanStatusText) lanStatusText.textContent = '开启直连房间失败: ' + err.message;
+      }
+    });
+  }
+  if (btnJoinDirectHost) {
+    btnJoinDirectHost.addEventListener('click', async () => {
+      try {
+        await joinDirectHostByAddress();
+      } catch (err) {
+        if (lanStatusText) lanStatusText.textContent = '直连加入失败: ' + err.message;
+      }
+    });
+  }
   if (btnHostCreate) {
     btnHostCreate.addEventListener('click', async () => {
       try {
@@ -9158,6 +10374,7 @@
       bank: plane.bank,
       visualRoll: plane.visualRoll,
       speed: plane.speed,
+      throttle: plane.throttle,
       burner: plane.burner,
       airbrake: plane.airbrake,
       hp: plane.hp,
@@ -9196,10 +10413,13 @@
       bot: {
         enabled: bot.enabled,
         alive: bot.alive,
+        difficulty: getBotProfile().tier,
         hp: bot.hp,
+        maxHp: bot.maxHp,
         pos: [...bot.pos],
         yaw: bot.yaw,
         speed: bot.speed,
+        throttle: bot.throttle,
         jetEnergy: bot.jetEnergy,
         jetCooldown: bot.jetCooldown,
         ecmActiveTimer: bot.ecmActiveTimer,
@@ -9212,9 +10432,12 @@
         role: net.role,
         myId: net.myId,
         callsign: net.callsign,
+        directRoomAddr: net.directRoomAddr,
+        ipv6: { ...net.ipv6 },
         peerCount: net.peers.size,
         peers: Array.from(net.peers.values()).map((p) => ({
           id: p.id, callsign: p.callsign, hp: p.hp, pos: [...p.pos],
+          proto: p.proto || null,
           lockTargetId: p.lockTargetId, lockProg: p.lockProg, kills: p.kills, deaths: p.deaths
         })),
         kills: net.kills,
@@ -9236,6 +10459,19 @@
       glError: gl.getError()
     }),
     hasLineOfSight,
+    probeIpv6Support,
+    expandCandidateWithPublicIpv6,
+    startDirectHostRoom,
+    joinDirectHostByAddress,
+    setBotDifficulty: (tier) => {
+      if (BOT_PROFILES[tier]) {
+        settings.botDiff = tier;
+        applyBotDifficultyChange();
+        saveSettings();
+        syncSettingsUI();
+      }
+      return getBotProfile().tier;
+    },
     createHostInvite,
     acceptGuestAnswer,
     joinWithInvite,
@@ -9258,9 +10494,11 @@
     triggerBarrelRoll,
     triggerEcm: () => triggerEcm(plane, true),
     toggleBot,
-    placeBotAt: (x, y, z, yaw = 0, hp = MAX_HP) => {
+    placeBotAt: (x, y, z, yaw = 0, hp = getBotProfile().hp) => {
       if (!bot.enabled) toggleBot(true);
+      const prof = getBotProfile();
       bot.alive = true;
+      bot.maxHp = prof.hp;
       bot.hp = hp;
       bot.pos = [x, Math.max(sampleSurfaceY(x, z) + 35, y), z];
       bot.quat = quatFromYawPitchRoll(yaw, 0, 0);
